@@ -17,9 +17,11 @@
     "framer-motion": "^12.14.0",
     "lucide-react": "^0.511.0",
     "mongodb": "^6.16.0",
+    "mongoose": "^8.15.0",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "svix": "^1.66.0",
     "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {

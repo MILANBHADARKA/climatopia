@@ -16,9 +16,12 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+import os
 
-# Load dataset
-df = pd.read_csv('Datasets/DailyDelhiClimateTrain.csv')
+base_path = os.path.dirname(__file__)  # folder of this script
+file_path = os.path.join(base_path, 'Datasets', 'DailyDelhiClimateTrain.csv')
+
+df = pd.read_csv(file_path)
 df['date'] = pd.to_datetime(df['date'])
 df.set_index('date', inplace=True)
 
@@ -154,9 +157,13 @@ print(f"Latest Predicted Temperature: {y_pred_rescaled[-1]:.2f}°C")
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+import os
 
-# Load new data
-new_df = pd.read_csv('Datasets/DailyDelhiClimateTest.csv')
+base_path = os.path.dirname(__file__)  # folder of this script
+file_path = os.path.join(base_path, 'Datasets', 'DailyDelhiClimateTest.csv')
+
+new_df = pd.read_csv(file_path)
+
 new_df['date'] = pd.to_datetime(new_df['date'])
 new_df.set_index('date', inplace=True)
 
@@ -229,7 +236,7 @@ fig.add_annotation(
 
 # Figure layout
 fig.update_layout(
-    title='LSTM Predictions on New Delhi Climate Test Data',
+    title='LSTM Predictions on Temperature',
     xaxis_title='Date',
     yaxis_title='Mean Temperature (°C)',
     legend=dict(x=0, y=1),
@@ -244,5 +251,14 @@ print(f"Latest Predicted Temperature: {new_predictions[-1]:.2f}°C")
 
 
 
+
+# Save model architecture to JSON
+model_json = model.to_json()
+with open("pretrained_lstm_model.json", "w") as json_file:
+    json_file.write(model_json)
+
+# Save weights
+model.save_weights("pretrained_lstm.weights.h5")
+print("Model architecture and weights saved.")
 
 

@@ -13,12 +13,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+from pydantic import BaseModel
+class ScenarioRequest(BaseModel):
+    scenario: str
+
+
 
 @app.post("/predict_adaptation")
-def predict_adaptation(scenario: str):
+def predict_adaptation(scenario: ScenarioRequest):
     try:
         from classify import classify_adaptation  
-        result = classify_adaptation(scenario)
+        result = classify_adaptation(scenario.scenario)
         return {"success": True, "predicted_adaptation_strategy": result}
     except Exception as e:
         return {"success": False, "error": str(e)}

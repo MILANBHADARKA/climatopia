@@ -10,12 +10,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+from pydantic import BaseModel
+class ScenarioRequest(BaseModel):
+    scenario: str
+
+
 
 @app.post("/temperature_prediction/")
-async def predict_temperature(scenario: str):
+async def predict_temperature(scenario: ScenarioRequest):
     try:
         from pretrained_temp_xbg import predict_temp
-        prediction = predict_temp(scenario)
+        prediction = predict_temp(scenario.scenario)
         return {"prediction": prediction}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

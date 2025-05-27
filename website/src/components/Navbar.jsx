@@ -6,6 +6,7 @@ import { Menu, X, Globe, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   SignInButton,
+  SignUpButton,
   UserButton,
   useUser,
 } from "@clerk/clerk-react"
@@ -84,11 +85,11 @@ export default function Navbar() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <SignInButton mode="modal">
+                  <SignUpButton mode="modal">
                     <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg">
                       Get Started
                     </Button>
-                  </SignInButton>
+                  </SignUpButton>
                 </motion.div>
               </>
             )}
@@ -137,11 +138,11 @@ export default function Navbar() {
                         Sign In
                       </Button>
                     </SignInButton>
-                    <SignInButton mode="modal">
+                    <SignUpButton mode="modal">
                       <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white">
                         Get Started
                       </Button>
-                    </SignInButton>
+                    </SignUpButton>
                   </>
                 )}
               </div>

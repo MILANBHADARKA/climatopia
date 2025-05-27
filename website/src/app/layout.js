@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { neobrutalism } from "@clerk/themes";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,6 @@ export default function RootLayout({ children }) {
           // Style the primary button (sign in/up buttons)
           formButtonPrimary:
             'bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors roobert-font',
-
         },
       }}
       signInUrl="/sign-in"
@@ -42,9 +42,9 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
           <Footer />
+          <Script src="https://checkout.razorpay.com/v1/checkout.js" />
         </body>
       </html>
     </ClerkProvider >
-
   );
 }

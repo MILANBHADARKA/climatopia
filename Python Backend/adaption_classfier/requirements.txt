@@ -1,9 +1,10 @@
+cloudinary
 xgboost
 numpy
-pandas
 scikit-learn
-fastapi
-uvicorn[standard]
-python-dotenv
+pandas
 langchain_groq
 langchain_core
+dotenv
+fastapi
+uvicorn

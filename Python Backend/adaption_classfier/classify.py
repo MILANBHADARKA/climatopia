@@ -4,7 +4,23 @@ from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 import pandas as pd
 import os
 from sklearn.metrics import classification_report
-from LLM import run_climate_scenario_prediction  
+from LLM import run_climate_scenario_prediction 
+
+import cloudinary
+from cloudinary.utils import cloudinary_url
+
+print("Setting up Cloudinary for dataset access...")
+# Set up your Cloudinary credentials
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
+print("Cloudinary configured successfully.")
+
+csv_url = os.getenv("CLIMATE_CHANGE_IMPACT_ON_AGICULTURE_2024")
+csvfile_url, _ = cloudinary_url(csv_url, resource_type="raw")
 
 
 def classify_adaptation(scenario: str) -> str:
@@ -27,7 +43,7 @@ def classify_adaptation(scenario: str) -> str:
     # Paths
     # ====================================
     base_path = os.path.dirname(__file__)
-    file_path = os.path.join(base_path, 'Datasets', 'climate_change_impact_on_agriculture_2024.csv')
+    file_path = csvfile_url
     model_path = os.path.join(base_path, 'pretrained_adaptation_classifier.json')
 
     # ====================================

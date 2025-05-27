@@ -1,7 +1,6 @@
 // pages/api/clerk-webhook.js
 import { connectToDB } from '@/lib/mongodb';
 import { Webhook } from 'svix';
-
 import User from '@/models/User'; 
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
@@ -64,6 +63,11 @@ export async function POST(request) {
       // Upsert user in the database
       
       if(type === 'user.created') {
+        const userExists = await User.findOne({ clerkId: userId });
+        if (userExists) {
+          return NextResponse.json({ message: 'User already exists' }, { status: 200 });
+        }
+
         await User.create(user);
       } else if(type === 'user.updated') {
         await User.updateOne({ clerkId: userId }, user, { upsert: true });

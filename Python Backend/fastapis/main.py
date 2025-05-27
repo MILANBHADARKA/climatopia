@@ -38,38 +38,6 @@ async def predict_humidity(scenario: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@app.post("/predict_croprate")
-def get_prediction(scenario:str):
-
-    try:
-        from pretrained_croprate_xgb import predict_croprate
-        result = predict_croprate(scenario)
-        return {"success": True, "result": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
-
-@app.post("/predict_adaptation")
-def predict_adaptation(scenario: str):
-    try:
-        from pretrained_adaptation_classfier import classify_adaptation
-        result = classify_adaptation(scenario)
-        return {"success": True, "predicted_adaptation_strategy": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
-@app.post("/predict_economic_impact")
-def predict_economic_impact(scenario: str):
-    try:
-        from pretrained_eco_xgb import predict_eco
-        predicted_value = predict_eco(scenario)
-        return {
-            "success": True,
-            "scenario": scenario,
-            "predicted_economic_impact_million_usd": predicted_value
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn

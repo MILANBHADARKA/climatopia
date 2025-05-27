@@ -19,7 +19,7 @@ cloudinary.config(
 print("Cloudinary configured successfully.")
 
 csv_url = os.getenv("DailyDelhiClimateTrain")
-
+csvfile_url, _ = cloudinary_url(csv_url, resource_type="raw")
 def predict_temp(prompt):
     # Run the LLM scenario-based prediction
     scenario = prompt

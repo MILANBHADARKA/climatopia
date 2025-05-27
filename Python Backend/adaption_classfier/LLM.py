@@ -3,23 +3,18 @@ import json
 from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from image_generation import generateImage
+# from image_generation import generateImage
 
 from dotenv import load_dotenv
 import os
 
 load_dotenv()  # This loads variables from .env into environment
 
-api_key = os.getenv("LLAMA_API_KEY")
-
-
-# Set your API key
-os.environ["GROQ_API_KEY"] = api_key
-
+api_key = os.getenv("GROQ_API_KEY")
 # Initialize LLM
 llm = ChatGroq(
     model_name="llama3-70b-8192",  # You can also try "llama3-8b-8192"
-    api_key=os.environ["GROQ_API_KEY"]
+    api_key=api_key
 )
 
 # Define prompt template

@@ -95,6 +95,7 @@ def electricity_demand_prediction(start_datetime):
     # Return the JSON string of the figure
     return fig.to_json()
 
+    
 
 # Example usage:
 if __name__ == "__main__":

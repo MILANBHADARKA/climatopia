@@ -1,0 +1,289 @@
+timestamp,electricity_demand,solar_generation,season,compensation_method
+2000-01-01,55752.76,4995.1,Winter,Increased Power Supply
+2000-02-01,64862.79,4408.8,Winter,Increased Power Supply
+2000-03-01,43939.99,8861.31,Spring,Increased Renewable Energy Integration
+2000-04-01,48384.82,7042.19,Spring,Increased Renewable Energy Integration
+2000-05-01,48547.0,8461.93,Spring,Increased Renewable Energy Integration
+2000-06-01,71472.12,16664.21,Summer,Peak Load Shifting & Solar Utilization
+2000-07-01,65999.47,13248.0,Summer,Peak Load Shifting & Solar Utilization
+2000-08-01,68564.34,14894.63,Summer,Peak Load Shifting & Solar Utilization
+2000-09-01,48249.05,9128.68,Fall,Normal Operation
+2000-10-01,48116.55,9400.59,Fall,Normal Operation
+2000-11-01,48861.61,8525.16,Fall,Normal Operation
+2000-12-01,65855.75,5021.37,Winter,Increased Power Supply
+2001-01-01,56850.7,5619.73,Winter,Increased Power Supply
+2001-02-01,55111.22,5156.99,Winter,Increased Power Supply
+2001-03-01,40708.84,7794.89,Spring,Increased Renewable Energy Integration
+2001-04-01,47556.19,8685.39,Spring,Increased Renewable Energy Integration
+2001-05-01,48690.04,6937.05,Spring,Increased Renewable Energy Integration
+2001-06-01,62170.3,13469.9,Summer,Peak Load Shifting & Solar Utilization
+2001-07-01,63701.44,15255.79,Summer,Peak Load Shifting & Solar Utilization
+2001-08-01,59227.62,16068.37,Summer,Peak Load Shifting & Solar Utilization
+2001-09-01,47979.6,7930.58,Fall,Normal Operation
+2001-10-01,49310.0,8609.92,Fall,Normal Operation
+2001-11-01,51202.12,7878.37,Fall,Normal Operation
+2001-12-01,55827.24,4551.75,Winter,Increased Power Supply
+2002-01-01,63930.68,5613.33,Winter,Increased Power Supply
+2002-02-01,55814.51,5594.52,Winter,Increased Power Supply
+2002-03-01,46115.55,8528.73,Spring,Increased Renewable Energy Integration
+2002-04-01,48240.28,8171.8,Spring,Increased Renewable Energy Integration
+2002-05-01,44834.85,8673.05,Spring,Increased Renewable Energy Integration
+2002-06-01,66023.99,16050.78,Summer,Peak Load Shifting & Solar Utilization
+2002-07-01,61512.28,15899.96,Summer,Peak Load Shifting & Solar Utilization
+2002-08-01,61053.33,16677.87,Summer,Peak Load Shifting & Solar Utilization
+2002-09-01,53773.13,8119.29,Fall,Normal Operation
+2002-10-01,53321.31,9643.35,Fall,Normal Operation
+2002-11-01,52401.58,9184.07,Fall,Normal Operation
+2002-12-01,60679.19,4359.32,Winter,Increased Power Supply
+2003-01-01,64692.45,4808.48,Winter,Increased Power Supply
+2003-02-01,55186.45,4575.87,Winter,Increased Power Supply
+2003-03-01,47653.34,7786.53,Spring,Increased Renewable Energy Integration
+2003-04-01,44786.2,7106.23,Spring,Increased Renewable Energy Integration
+2003-05-01,49307.84,7226.74,Spring,Increased Renewable Energy Integration
+2003-06-01,70904.43,16170.43,Summer,Peak Load Shifting & Solar Utilization
+2003-07-01,71090.62,13602.16,Summer,Peak Load Shifting & Solar Utilization
+2003-08-01,65844.56,13408.83,Summer,Peak Load Shifting & Solar Utilization
+2003-09-01,45979.36,9220.7,Fall,Normal Operation
+2003-10-01,52400.87,9244.91,Fall,Normal Operation
+2003-11-01,53764.72,8832.54,Fall,Normal Operation
+2003-12-01,54814.54,5103.17,Winter,Increased Power Supply
+2004-01-01,58820.22,4657.69,Winter,Increased Power Supply
+2004-02-01,54529.31,4391.58,Winter,Increased Power Supply
+2004-03-01,42624.02,7340.25,Spring,Increased Renewable Energy Integration
+2004-04-01,41397.07,8196.98,Spring,Increased Renewable Energy Integration
+2004-05-01,48845.89,8020.45,Spring,Increased Renewable Energy Integration
+2004-06-01,61887.93,14633.76,Summer,Peak Load Shifting & Solar Utilization
+2004-07-01,63629.5,16539.74,Summer,Peak Load Shifting & Solar Utilization
+2004-08-01,62901.96,14190.11,Summer,Peak Load Shifting & Solar Utilization
+2004-09-01,51837.61,7765.77,Fall,Normal Operation
+2004-10-01,48076.48,10157.28,Fall,Normal Operation
+2004-11-01,48785.11,8758.67,Fall,Normal Operation
+2004-12-01,58369.71,5365.03,Winter,Increased Power Supply
+2005-01-01,59442.58,4906.49,Winter,Increased Power Supply
+2005-02-01,61676.9,4765.9,Winter,Increased Power Supply
+2005-03-01,43182.89,7817.38,Spring,Increased Renewable Energy Integration
+2005-04-01,40852.34,7605.62,Spring,Increased Renewable Energy Integration
+2005-05-01,41307.35,8447.07,Spring,Increased Renewable Energy Integration
+2005-06-01,60302.71,16033.16,Summer,Peak Load Shifting & Solar Utilization
+2005-07-01,59306.38,14890.35,Summer,Peak Load Shifting & Solar Utilization
+2005-08-01,60578.35,16870.84,Summer,Peak Load Shifting & Solar Utilization
+2005-09-01,48616.32,8232.14,Fall,Normal Operation
+2005-10-01,50032.12,8507.57,Fall,Normal Operation
+2005-11-01,52625.42,9961.54,Fall,Normal Operation
+2005-12-01,55163.44,5735.2,Winter,Increased Power Supply
+2006-01-01,58715.17,5020.14,Winter,Increased Power Supply
+2006-02-01,54998.03,5421.64,Winter,Increased Power Supply
+2006-03-01,45758.25,8759.83,Spring,Increased Renewable Energy Integration
+2006-04-01,48019.73,7397.56,Spring,Increased Renewable Energy Integration
+2006-05-01,40534.45,7123.96,Spring,Increased Renewable Energy Integration
+2006-06-01,63394.32,13187.64,Summer,Peak Load Shifting & Solar Utilization
+2006-07-01,63073.18,14263.41,Summer,Peak Load Shifting & Solar Utilization
+2006-08-01,62438.29,13257.55,Summer,Peak Load Shifting & Solar Utilization
+2006-09-01,51849.39,7678.9,Fall,Normal Operation
+2006-10-01,53630.35,10303.07,Fall,Normal Operation
+2006-11-01,54229.92,9838.83,Fall,Normal Operation
+2006-12-01,55011.66,5360.06,Winter,Increased Power Supply
+2007-01-01,58734.46,5562.88,Winter,Increased Power Supply
+2007-02-01,55174.86,5025.23,Winter,Increased Power Supply
+2007-03-01,46739.62,8915.1,Spring,Increased Renewable Energy Integration
+2007-04-01,44528.92,8047.67,Spring,Increased Renewable Energy Integration
+2007-05-01,42850.88,8611.24,Spring,Increased Renewable Energy Integration
+2007-06-01,70695.2,15656.86,Summer,Peak Load Shifting & Solar Utilization
+2007-07-01,71430.79,14459.26,Summer,Peak Load Shifting & Solar Utilization
+2007-08-01,63709.16,14309.17,Summer,Peak Load Shifting & Solar Utilization
+2007-09-01,53531.11,9315.29,Fall,Normal Operation
+2007-10-01,46355.67,8035.7,Fall,Normal Operation
+2007-11-01,53699.38,10059.32,Fall,Normal Operation
+2007-12-01,65612.31,5495.92,Winter,Increased Power Supply
+2008-01-01,56718.11,4812.91,Winter,Increased Power Supply
+2008-02-01,59595.57,4377.25,Winter,Increased Power Supply
+2008-03-01,48916.17,8174.16,Spring,Increased Renewable Energy Integration
+2008-04-01,41699.99,8906.71,Spring,Increased Renewable Energy Integration
+2008-05-01,46460.85,9138.81,Spring,Increased Renewable Energy Integration
+2008-06-01,64589.12,13691.77,Summer,Peak Load Shifting & Solar Utilization
+2008-07-01,68832.0,17159.56,Summer,Peak Load Shifting & Solar Utilization
+2008-08-01,63117.63,14554.47,Summer,Peak Load Shifting & Solar Utilization
+2008-09-01,49235.79,8598.27,Fall,Normal Operation
+2008-10-01,49733.73,8812.1,Fall,Normal Operation
+2008-11-01,51788.13,10222.54,Fall,Normal Operation
+2008-12-01,57325.11,4434.29,Winter,Increased Power Supply
+2009-01-01,55210.36,5412.65,Winter,Increased Power Supply
+2009-02-01,64849.56,4566.05,Winter,Increased Power Supply
+2009-03-01,43441.88,6883.97,Spring,Increased Renewable Energy Integration
+2009-04-01,46966.73,8704.98,Spring,Increased Renewable Energy Integration
+2009-05-01,46396.94,8761.92,Spring,Increased Renewable Energy Integration
+2009-06-01,63846.72,14947.36,Summer,Peak Load Shifting & Solar Utilization
+2009-07-01,59221.59,16687.59,Summer,Peak Load Shifting & Solar Utilization
+2009-08-01,70168.12,16021.83,Summer,Peak Load Shifting & Solar Utilization
+2009-09-01,50563.29,8749.93,Fall,Normal Operation
+2009-10-01,46346.26,9755.05,Fall,Normal Operation
+2009-11-01,52705.06,10229.0,Fall,Normal Operation
+2009-12-01,64032.78,5276.57,Winter,Increased Power Supply
+2010-01-01,59931.16,4902.86,Winter,Increased Power Supply
+2010-02-01,55037.86,5630.08,Winter,Increased Power Supply
+2010-03-01,45176.22,7649.5,Spring,Increased Renewable Energy Integration
+2010-04-01,41790.29,9119.68,Spring,Increased Renewable Energy Integration
+2010-05-01,44190.4,8092.17,Spring,Increased Renewable Energy Integration
+2010-06-01,64122.1,16233.78,Summer,Peak Load Shifting & Solar Utilization
+2010-07-01,58664.54,15019.37,Summer,Peak Load Shifting & Solar Utilization
+2010-08-01,60739.32,14810.14,Summer,Peak Load Shifting & Solar Utilization
+2010-09-01,52862.1,8360.08,Fall,Normal Operation
+2010-10-01,47009.29,8846.28,Fall,Normal Operation
+2010-11-01,47215.73,8170.23,Fall,Normal Operation
+2010-12-01,55480.73,5294.58,Winter,Increased Power Supply
+2011-01-01,54198.37,5492.43,Winter,Increased Power Supply
+2011-02-01,55067.3,5625.67,Winter,Increased Power Supply
+2011-03-01,44512.61,8055.23,Spring,Increased Renewable Energy Integration
+2011-04-01,41302.43,6801.43,Spring,Increased Renewable Energy Integration
+2011-05-01,41015.74,8375.94,Spring,Increased Renewable Energy Integration
+2011-06-01,67958.6,16019.26,Summer,Peak Load Shifting & Solar Utilization
+2011-07-01,67959.34,15288.43,Summer,Peak Load Shifting & Solar Utilization
+2011-08-01,69785.35,12975.43,Summer,Peak Load Shifting & Solar Utilization
+2011-09-01,45171.19,9106.81,Fall,Normal Operation
+2011-10-01,49497.56,9250.96,Fall,Normal Operation
+2011-11-01,54547.21,10328.98,Fall,Normal Operation
+2011-12-01,54729.16,5113.12,Winter,Increased Power Supply
+2012-01-01,56963.57,4672.32,Winter,Increased Power Supply
+2012-02-01,55087.09,4653.14,Winter,Increased Power Supply
+2012-03-01,48780.54,8058.27,Spring,Increased Renewable Energy Integration
+2012-04-01,44097.06,8531.45,Spring,Increased Renewable Energy Integration
+2012-05-01,41470.21,6895.37,Spring,Increased Renewable Energy Integration
+2012-06-01,59224.72,14849.53,Summer,Peak Load Shifting & Solar Utilization
+2012-07-01,59236.26,17157.27,Summer,Peak Load Shifting & Solar Utilization
+2012-08-01,60604.42,16133.14,Summer,Peak Load Shifting & Solar Utilization
+2012-09-01,54098.95,7717.99,Fall,Normal Operation
+2012-10-01,45937.76,8885.65,Fall,Normal Operation
+2012-11-01,53065.95,7892.05,Fall,Normal Operation
+2012-12-01,59813.22,5330.08,Winter,Increased Power Supply
+2013-01-01,64516.99,5514.79,Winter,Increased Power Supply
+2013-02-01,63941.14,4415.65,Winter,Increased Power Supply
+2013-03-01,43498.58,8350.02,Spring,Increased Renewable Energy Integration
+2013-04-01,45097.74,7399.24,Spring,Increased Renewable Energy Integration
+2013-05-01,42086.34,7504.15,Spring,Increased Renewable Energy Integration
+2013-06-01,64656.38,16358.9,Summer,Peak Load Shifting & Solar Utilization
+2013-07-01,64819.55,16670.16,Summer,Peak Load Shifting & Solar Utilization
+2013-08-01,68908.61,13862.88,Summer,Peak Load Shifting & Solar Utilization
+2013-09-01,47548.97,10000.65,Fall,Normal Operation
+2013-10-01,49887.22,10094.98,Fall,Normal Operation
+2013-11-01,45036.06,8448.23,Fall,Normal Operation
+2013-12-01,57488.11,4584.56,Winter,Increased Power Supply
+2014-01-01,63064.35,4963.41,Winter,Increased Power Supply
+2014-02-01,55423.44,5733.66,Winter,Increased Power Supply
+2014-03-01,49087.98,6973.83,Spring,Increased Renewable Energy Integration
+2014-04-01,44655.91,6829.67,Spring,Increased Renewable Energy Integration
+2014-05-01,44875.64,8188.34,Spring,Increased Renewable Energy Integration
+2014-06-01,65602.71,15236.93,Summer,Peak Load Shifting & Solar Utilization
+2014-07-01,67068.82,16183.01,Summer,Peak Load Shifting & Solar Utilization
+2014-08-01,66066.3,15468.14,Summer,Peak Load Shifting & Solar Utilization
+2014-09-01,47926.41,7865.49,Fall,Normal Operation
+2014-10-01,51492.45,10324.98,Fall,Normal Operation
+2014-11-01,47773.41,9553.34,Fall,Normal Operation
+2014-12-01,62361.39,5102.73,Winter,Increased Power Supply
+2015-01-01,57421.02,5184.52,Winter,Increased Power Supply
+2015-02-01,57659.67,4605.39,Winter,Increased Power Supply
+2015-03-01,45097.1,7962.68,Spring,Increased Renewable Energy Integration
+2015-04-01,49487.58,8274.73,Spring,Increased Renewable Energy Integration
+2015-05-01,49282.1,7883.82,Spring,Increased Renewable Energy Integration
+2015-06-01,71382.34,16585.1,Summer,Peak Load Shifting & Solar Utilization
+2015-07-01,67890.4,13137.53,Summer,Peak Load Shifting & Solar Utilization
+2015-08-01,60816.61,16396.95,Summer,Peak Load Shifting & Solar Utilization
+2015-09-01,49179.12,8248.13,Fall,Normal Operation
+2015-10-01,47103.61,9058.38,Fall,Normal Operation
+2015-11-01,46419.18,9117.44,Fall,Normal Operation
+2015-12-01,61927.88,5465.89,Winter,Increased Power Supply
+2016-01-01,57266.76,5711.47,Winter,Increased Power Supply
+2016-02-01,59890.66,4739.15,Winter,Increased Power Supply
+2016-03-01,41729.18,6902.75,Spring,Increased Renewable Energy Integration
+2016-04-01,42425.43,8172.07,Spring,Increased Renewable Energy Integration
+2016-05-01,43460.3,8428.61,Spring,Increased Renewable Energy Integration
+2016-06-01,59921.22,16689.15,Summer,Peak Load Shifting & Solar Utilization
+2016-07-01,62265.78,14167.95,Summer,Peak Load Shifting & Solar Utilization
+2016-08-01,67825.42,13691.63,Summer,Peak Load Shifting & Solar Utilization
+2016-09-01,53395.99,10273.54,Fall,Normal Operation
+2016-10-01,54791.19,9279.94,Fall,Normal Operation
+2016-11-01,45076.94,9653.16,Fall,Normal Operation
+2016-12-01,65435.77,4641.12,Winter,Increased Power Supply
+2017-01-01,60776.54,5162.6,Winter,Increased Power Supply
+2017-02-01,56740.18,4576.95,Winter,Increased Power Supply
+2017-03-01,42609.08,7439.93,Spring,Increased Renewable Energy Integration
+2017-04-01,48815.35,8596.97,Spring,Increased Renewable Energy Integration
+2017-05-01,45689.02,8615.81,Spring,Increased Renewable Energy Integration
+2017-06-01,69038.99,14834.35,Summer,Peak Load Shifting & Solar Utilization
+2017-07-01,71250.7,14674.93,Summer,Peak Load Shifting & Solar Utilization
+2017-08-01,68553.3,14357.16,Summer,Peak Load Shifting & Solar Utilization
+2017-09-01,45442.33,8812.39,Fall,Normal Operation
+2017-10-01,46893.08,8477.33,Fall,Normal Operation
+2017-11-01,52254.16,8430.03,Fall,Normal Operation
+2017-12-01,55638.43,4297.21,Winter,Increased Power Supply
+2018-01-01,65077.38,4902.59,Winter,Increased Power Supply
+2018-02-01,56638.85,4644.75,Winter,Increased Power Supply
+2018-03-01,42627.79,8560.26,Spring,Increased Renewable Energy Integration
+2018-04-01,41048.07,9030.52,Spring,Increased Renewable Energy Integration
+2018-05-01,41333.98,8262.96,Spring,Increased Renewable Energy Integration
+2018-06-01,60185.56,14477.1,Summer,Peak Load Shifting & Solar Utilization
+2018-07-01,68781.46,17166.67,Summer,Peak Load Shifting & Solar Utilization
+2018-08-01,60351.02,15073.37,Summer,Peak Load Shifting & Solar Utilization
+2018-09-01,53226.76,10046.49,Fall,Normal Operation
+2018-10-01,45291.25,10132.31,Fall,Normal Operation
+2018-11-01,45778.92,9124.51,Fall,Normal Operation
+2018-12-01,57451.03,5420.31,Winter,Increased Power Supply
+2019-01-01,60556.56,5366.86,Winter,Increased Power Supply
+2019-02-01,61369.6,4344.62,Winter,Increased Power Supply
+2019-03-01,47884.73,7185.62,Spring,Increased Renewable Energy Integration
+2019-04-01,44546.77,8322.86,Spring,Increased Renewable Energy Integration
+2019-05-01,47491.01,7519.82,Spring,Increased Renewable Energy Integration
+2019-06-01,62696.68,15779.11,Summer,Peak Load Shifting & Solar Utilization
+2019-07-01,60357.81,16262.26,Summer,Peak Load Shifting & Solar Utilization
+2019-08-01,59434.53,14472.57,Summer,Peak Load Shifting & Solar Utilization
+2019-09-01,45773.61,9118.3,Fall,Normal Operation
+2019-10-01,48290.54,9378.04,Fall,Normal Operation
+2019-11-01,52954.85,10324.57,Fall,Normal Operation
+2019-12-01,61401.55,5669.8,Winter,Increased Power Supply
+2020-01-01,63100.64,4939.64,Winter,Increased Power Supply
+2020-02-01,62584.87,4366.56,Winter,Increased Power Supply
+2020-03-01,42426.33,8102.02,Spring,Increased Renewable Energy Integration
+2020-04-01,43269.79,8787.33,Spring,Increased Renewable Energy Integration
+2020-05-01,43116.98,7913.29,Spring,Increased Renewable Energy Integration
+2020-06-01,60505.57,13506.41,Summer,Peak Load Shifting & Solar Utilization
+2020-07-01,68020.18,15016.21,Summer,Peak Load Shifting & Solar Utilization
+2020-08-01,70057.25,13228.82,Summer,Peak Load Shifting & Solar Utilization
+2020-09-01,49171.52,9547.25,Fall,Normal Operation
+2020-10-01,45478.04,9503.91,Fall,Normal Operation
+2020-11-01,46592.97,9366.07,Fall,Normal Operation
+2020-12-01,58505.68,5614.89,Winter,Increased Power Supply
+2021-01-01,64454.94,4413.25,Winter,Increased Power Supply
+2021-02-01,62815.43,4345.65,Winter,Increased Power Supply
+2021-03-01,47863.19,9140.81,Spring,Increased Renewable Energy Integration
+2021-04-01,43213.91,8495.69,Spring,Increased Renewable Energy Integration
+2021-05-01,47588.65,7034.31,Spring,Increased Renewable Energy Integration
+2021-06-01,67847.94,15070.75,Summer,Peak Load Shifting & Solar Utilization
+2021-07-01,63951.41,14352.54,Summer,Peak Load Shifting & Solar Utilization
+2021-08-01,67265.62,16550.48,Summer,Peak Load Shifting & Solar Utilization
+2021-09-01,45634.81,9089.03,Fall,Normal Operation
+2021-10-01,50943.25,8468.97,Fall,Normal Operation
+2021-11-01,46137.73,7720.43,Fall,Normal Operation
+2021-12-01,64044.28,4267.57,Winter,Increased Power Supply
+2022-01-01,64752.32,5490.81,Winter,Increased Power Supply
+2022-02-01,56680.13,5408.52,Winter,Increased Power Supply
+2022-03-01,42290.67,8793.79,Spring,Increased Renewable Energy Integration
+2022-04-01,49171.11,8562.77,Spring,Increased Renewable Energy Integration
+2022-05-01,49068.5,8161.62,Spring,Increased Renewable Energy Integration
+2022-06-01,62796.22,12774.47,Summer,Peak Load Shifting & Solar Utilization
+2022-07-01,66776.66,16864.79,Summer,Peak Load Shifting & Solar Utilization
+2022-08-01,61282.33,15539.98,Summer,Peak Load Shifting & Solar Utilization
+2022-09-01,52861.07,9813.84,Fall,Normal Operation
+2022-10-01,52167.37,7826.0,Fall,Normal Operation
+2022-11-01,45098.63,10315.18,Fall,Normal Operation
+2022-12-01,59801.33,4875.42,Winter,Increased Power Supply
+2023-01-01,62845.66,5283.78,Winter,Increased Power Supply
+2023-02-01,58347.72,5359.46,Winter,Increased Power Supply
+2023-03-01,43518.29,7240.4,Spring,Increased Renewable Energy Integration
+2023-04-01,43250.88,7237.1,Spring,Increased Renewable Energy Integration
+2023-05-01,46750.66,7172.27,Spring,Increased Renewable Energy Integration
+2023-06-01,67559.48,14010.42,Summer,Peak Load Shifting & Solar Utilization
+2023-07-01,70428.04,14377.97,Summer,Peak Load Shifting & Solar Utilization
+2023-08-01,69623.64,14920.31,Summer,Peak Load Shifting & Solar Utilization
+2023-09-01,54433.97,8236.61,Fall,Normal Operation
+2023-10-01,48440.13,8044.02,Fall,Normal Operation
+2023-11-01,49787.17,8845.4,Fall,Normal Operation
+2023-12-01,56883.66,5299.55,Winter,Increased Power Supply

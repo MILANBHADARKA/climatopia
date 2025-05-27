@@ -41,7 +41,7 @@ def create_xgb_sequences(data, window_size, target_column):
     return np.array(X), np.array(y)
 
 window_size = 30  # last 30 days
-target_column = 0  # 'meantemp'
+target_column = 1  # 'humidity'
 X, y = create_xgb_sequences(scaled_data, window_size, target_column)
 
 # Train-test split
@@ -135,7 +135,7 @@ fig.update_layout(
 # print(f"Latest Predicted Temperature: {y_pred_rescaled[-1]:.2f}°C")
 
 # Save model to JSON
-model.save_model("xgb_temp_model.json")
+model.save_model("xgb_humidity_model.json")
 print("✅ XGBoost model saved as JSON.")
 
 

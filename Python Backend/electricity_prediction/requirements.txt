@@ -1,0 +1,6 @@
+pandas
+plotly
+xgboost
+scikit-learn
+fastapi
+uvicorn

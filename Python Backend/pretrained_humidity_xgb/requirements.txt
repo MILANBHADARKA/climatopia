@@ -7,3 +7,4 @@ langchain_groq
 langchain_core
 dotenv
 fastapi
+uvicorn

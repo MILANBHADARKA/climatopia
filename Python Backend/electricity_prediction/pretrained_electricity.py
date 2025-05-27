@@ -93,6 +93,7 @@ def electricity_demand_prediction(start_datetime):
 
     fig.show()
 
+    
 
 # Example usage:
 if __name__ == "__main__":

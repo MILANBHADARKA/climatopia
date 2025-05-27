@@ -9,19 +9,23 @@ import {
   SignInButton,
   SignUpButton,
   UserButton,
-  useUser,
 } from "@clerk/clerk-react"
+import { useAuth } from '@clerk/nextjs';
+import { useUser } from '@clerk/nextjs';
+import { useEffect } from "react"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const { isSignedIn } = useUser()
+  // const { isSignedIn } = useUser()
+  const { isSignedIn, isLoaded } = useAuth();
+  const { user } = useUser();
   const pathname = usePathname()
+  const [userCredits, setUserCredits] = useState(0)
 
   const allNavItems = [
     { name: "Home", href: "/" },
     { name: "Features", href: "#features" },
     { name: "Contact", href: "#contact" },
-    { name: "Pricing", href: "#pricing" },
     { name: "Community", href: "/community" },
     { name: "Profile", href: "/profile" },
   ]
@@ -31,9 +35,27 @@ export default function Navbar() {
     if (pathname === "/") {
       return true // Show all items on home page
     } else {
-      return item.name !== "Features" && item.name !== "Contact" && item.name !== "Pricing"
+      return item.name !== "Features" && item.name !== "Contact"
     }
   })
+
+  useEffect(() => {
+    if (isSignedIn && user) {
+      fetchUserCredits()
+    }
+  }, [isSignedIn, user])
+
+  const fetchUserCredits = async () => {
+    try {
+      const res = await fetch('/api/user/credits')
+      if (res.ok) {
+        const data = await res.json()
+        setUserCredits(data.credits)
+      }
+    } catch (error) {
+      console.error('Failed to fetch credits:', error)
+    }
+  }
 
   return (
     <motion.nav
@@ -81,10 +103,26 @@ export default function Navbar() {
             ))}
           </div>
 
+
+
           {/* Auth Buttons or User Avatar */}
           <div className="hidden md:flex items-center space-x-4">
             {isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <div className="flex items-center space-x-3">
+                {/* Credits Display */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-3 py-2 rounded-full border border-blue-200"
+                >
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-semibold text-gray-700">
+                    {userCredits} Credits
+                  </span>
+                </motion.div>
+                <UserButton afterSignOutUrl="/" />
+              </div>
             ) : (
               <>
                 <motion.div
@@ -155,7 +193,18 @@ export default function Navbar() {
               ))}
               <div className="pt-4 space-y-2">
                 {isSignedIn ? (
-                  <UserButton afterSignOutUrl="/" />
+                  <div className="space-y-3">
+                    {/* Mobile Credits Display */}
+                    <div className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-3 rounded-xl border border-blue-200">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-semibold text-gray-700">
+                        {userCredits} Credits Available
+                      </span>
+                    </div>
+                    <div className="flex justify-center">
+                      <UserButton afterSignOutUrl="/" />
+                    </div>
+                  </div>
                 ) : (
                   <>
                     <SignInButton mode="modal">

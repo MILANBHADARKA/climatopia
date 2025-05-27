@@ -107,7 +107,8 @@ export default function PostDetailPage() {
 
   const handleLikeComment = async (commentId) => {
     if (isLoaded && isSignedIn) {
-
+      if (likeLoading) return; // Prevent multiple clicks
+      setLikeLoading(true);
       try {
         const response = await fetch(`/api/posts/comments/${commentId}/like`, {
           method: "POST",
@@ -115,8 +116,11 @@ export default function PostDetailPage() {
         if (response.ok) {
           fetchComments()
         }
+        setLikeLoading(false);
       } catch (error) {
         console.error("Error liking comment:", error)
+      } finally {
+        setLikeLoading(false);
       }
     }
     else {

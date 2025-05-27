@@ -4,8 +4,16 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # This loads variables from .env into environment
+
+api_key = os.getenv("LLAMA_API_KEY")
+
+
 # Set your API key
-os.environ["GROQ_API_KEY"] = "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"
+os.environ["GROQ_API_KEY"] = api_key
 
 # Initialize LLM
 llm = ChatGroq(

@@ -7,5 +7,3 @@ uvicorn[standard]
 python-dotenv
 langchain_groq
 langchain_core
-diffusers
-torch

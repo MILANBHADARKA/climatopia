@@ -15,7 +15,14 @@ export async function GET(request, { params }) {
     // Production code with MongoDB
     await connectToDB()
 
-    const comments = await Comment.find({ post: params.id })
+    const paramsId = await params.id
+    if (!paramsId) {
+      return Response.json({ error: "Post ID is required" }, { status: 400 })
+    }
+
+    // console.log("Fetching comments for post ID:", paramsId)
+
+    const comments = await Comment.find({ post: paramsId })
       .populate("author", "firstName lastName email")
       .sort({ createdAt: -1 })
       .lean()

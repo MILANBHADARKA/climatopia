@@ -7,6 +7,9 @@ import Link from "next/link"
 import PostCard from "@/components/PostCard"
 import SearchBar from "@/components/SearchBar"
 import Toast from "@/components/Toast"
+import { useAuth } from '@clerk/nextjs';
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 
 export default function CommunityPage() {
   const [posts, setPosts] = useState([])
@@ -16,6 +19,10 @@ export default function CommunityPage() {
   const [error, setError] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [toast, setToast] = useState({ show: false, message: "", type: "success" })
+  const { isSignedIn, isLoaded } = useAuth();
+  const { user } = useUser();
+  const router = useRouter();
+  const [likeLoading, setLikeLoading] = useState(false);
 
   useEffect(() => {
     fetchPosts()
@@ -51,17 +58,28 @@ export default function CommunityPage() {
   }
 
   const handleLike = async (postId) => {
-    try {
-      const response = await fetch(`/api/posts/${postId}/like`, {
-        method: "POST",
-      })
-      if (response.ok) {
-        fetchPosts()
-        showToast("Post liked!", "success")
-      }
-    } catch (error) {
-      console.error("Error liking post:", error)
-      showToast("Failed to like post", "error")
+
+    if (isLoaded && isSignedIn) {
+      if (likeLoading) return; // Prevent multiple clicks
+      setLikeLoading(true);
+      try {
+        const response = await fetch(`/api/posts/${postId}/like`, {
+          method: "POST",
+        })
+        if (response.ok) {
+          fetchPosts()
+          showToast("Post liked!", "success")
+        }
+      } catch (error) {
+        console.error("Error liking post:", error)
+        showToast("Failed to like post", "error")
+      } finally {
+        setLikeLoading(false);
+      } 
+    }
+    else {
+      showToast("Please sign in to like posts", "info")
+      router.push('/sign-in');
     }
   }
 
@@ -136,7 +154,50 @@ export default function CommunityPage() {
     )
   }
 
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full"
+        />
+      </div>
+    )
+  }
+
+  // if (!isSignedIn) {
+  //   return (
+  //     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+  //       <div className="text-center">
+  //         <MessageCircle size={48} className="mx-auto text-gray-400 mb-4" />
+  //         <h2 className="text-2xl font-bold text-gray-900 mb-2">Join the Community</h2>
+  //         <p className="text-gray-600 mb-4">Sign in to explore "What If" scenarios and share your own!</p>
+  //         <Link href="/sign-in">
+  //           <motion.button
+  //             whileHover={{ scale: 1.05 }}
+  //             whileTap={{ scale: 0.95 }}
+  //             className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg"
+  //           >
+  //             Sign In
+  //           </motion.button>
+  //         </Link>
+  //       </div>
+  //     </div>
+  //   )
+  // }
+
   return (
+    <>
+    { likeLoading && (
+      <div className="fixed inset-0 bg-gray-50 bg-opacity-50 opacity-50 flex items-center justify-center z-50">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full"
+        />
+      </div>
+    )}
     <div className="mt-16 min-h-screen bg-gray-50">
       {/* Header */}
       <motion.div
@@ -248,5 +309,6 @@ export default function CommunityPage() {
         onClose={() => setToast({ ...toast, show: false })}
       />
     </div>
+    </>
   )
 }

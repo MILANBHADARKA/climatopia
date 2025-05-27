@@ -2,7 +2,7 @@ import { connectToDB } from "@/lib/mongodb";
 import crypto from "crypto";
 import Transaction from "@/models/Transaction";
 import path from "path";
-import { sendMail } from "@/services/send-mail/sendMail";
+import { sendMail } from "@/util/send-mail/sendMail";
 
 
 export async function POST(request) {

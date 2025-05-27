@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { User, Heart, MessageCircle, Calendar, TrendingUp, Edit, Trash2 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import IsSignedIn from "@/components/HOC/IsSignedIn"
 
 export default function ProfilePage() {
   const [userPosts, setUserPosts] = useState([])
@@ -74,6 +75,7 @@ export default function ProfilePage() {
   }
 
   return (
+    <IsSignedIn>
     <div className="mt-16 min-h-screen bg-gray-50">
       {/* Header */}
       <motion.div
@@ -256,5 +258,6 @@ export default function ProfilePage() {
         </motion.div>
       </div>
     </div>
+    </IsSignedIn>
   )
 }

@@ -11,11 +11,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/humidity_prediction/")
-async def predict_humidity(scenario: str):
+@app.post("/temperature_prediction/")
+async def predict_temperature(scenario: str):
     try:
-        from pretrained_humidity_xgb import predict_humidity
-        prediction = predict_humidity(scenario)
+        from pretrained_temp_xbg import predict_temp
+        prediction = predict_temp(scenario)
         return {"prediction": prediction}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

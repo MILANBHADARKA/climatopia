@@ -6,6 +6,14 @@ from pretrained_croprate_xgb import predict_croprate
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or specify your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 class ScenarioRequest(BaseModel):
     scenario: str
 

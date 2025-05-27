@@ -91,7 +91,9 @@ def electricity_demand_prediction(start_datetime):
         xaxis=dict(tickformat="%H:%M", tickangle=45)
     )
 
-    fig.show()
+
+    # Return the JSON string of the figure
+    return fig.to_json()
 
 
 # Example usage:

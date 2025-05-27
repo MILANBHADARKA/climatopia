@@ -1,0 +1,9 @@
+cloudinary
+numpy
+scikit-learn
+pandas
+dotenv
+fastapi
+uvicorn
+tensorflow
+plotly

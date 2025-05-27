@@ -1,5 +1,5 @@
 // pages/api/clerk-webhook.js
-import { connectToDB } from '@/lib/mongodb';
+import { connectDB } from '@/lib/mongodb';
 import { Webhook } from 'svix';
 import User from '@/models/User'; 
 import { NextResponse } from 'next/server';
@@ -59,7 +59,7 @@ export async function POST(request) {
     };
 
     try {
-      await connectToDB();
+      await connectDB();
       // Upsert user in the database
       
       if(type === 'user.created') {

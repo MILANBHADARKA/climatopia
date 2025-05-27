@@ -57,6 +57,19 @@ def predict_adaptation(scenario: str):
         return {"success": True, "predicted_adaptation_strategy": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/predict_economic_impact")
+def predict_economic_impact(scenario: str):
+    try:
+        from pretrained_eco_xgb import predict_eco
+        predicted_value = predict_eco(scenario)
+        return {
+            "success": True,
+            "scenario": scenario,
+            "predicted_economic_impact_million_usd": predicted_value
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn

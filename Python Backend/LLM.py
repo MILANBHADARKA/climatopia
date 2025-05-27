@@ -3,6 +3,7 @@ import json
 from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from image_generation import generateImage
 
 from dotenv import load_dotenv
 import os
@@ -77,8 +78,9 @@ def run_climate_scenario_prediction(scenario: str):
         return f"Error parsing JSON: {e}\nRaw result:\n{result}"
 
 # Example usage
-scenario = "What if half the earth becomes ice??"
-prediction = run_climate_scenario_prediction(scenario)
+# scenario = "What if half the earth becomes ice??"
+# prediction = run_climate_scenario_prediction(scenario)
+# # generateImage(scenario)
 
-print("🌍 LLM Climate Impact Prediction:")
-print(json.dumps(prediction, indent=2) if isinstance(prediction, dict) else prediction)
+# print("🌍 LLM Climate Impact Prediction:")
+# print(json.dumps(prediction, indent=2) if isinstance(prediction, dict) else prediction)

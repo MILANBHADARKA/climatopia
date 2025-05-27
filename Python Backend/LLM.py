@@ -38,6 +38,7 @@ Estimate the impact on the following indicators:
 - Fertilizer_Use_KG_per_HA
 - Soil_Health_Index (0-100)
 -solar power generated (MWH)
+-Temperature (celcius)
 
 only "meantemp" can be negative. every other thing should be positive.
 
@@ -55,7 +56,8 @@ Output format:
   "Pesticide_Use_KG_per_HA": float,
   "Fertilizer_Use_KG_per_HA": float,
   "Soil_Health_Index": float
-  "solar power generated": float
+  "solar_generation": float
+  "Temperature": float
 }}
 Only return valid JSON. No explanation.
 """)

@@ -1,0 +1,11 @@
+xgboost
+numpy
+pandas
+scikit-learn
+fastapi
+uvicorn[standard]
+python-dotenv
+langchain_groq
+langchain_core
+diffusers
+torch

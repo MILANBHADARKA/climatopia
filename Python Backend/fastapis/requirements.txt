@@ -1,0 +1,14 @@
+xgboost
+numpy
+pandas
+scikit-learn
+fastapi
+langchain_groq
+langchain_core
+diffusers
+torch
+dotenv
+uvicorn
+cloudinary
+tensorflow
+plotly

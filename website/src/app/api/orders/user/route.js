@@ -1,7 +1,7 @@
 import { getAuth } from "@clerk/nextjs/server";
 import { clerkClient } from "@clerk/clerk-sdk-node";
 import { connectToDB } from "@/lib/mongodb";
-import Order from "@/models/Order";
+import Transaction from "@/models/Transaction";
 import User from "@/models/User";
 
 export async function GET(request) {
@@ -35,10 +35,9 @@ export async function GET(request) {
             });
         }
 
-        const orders = await Order
-                        .find({ userId: userMongo._id })
-                        .populate("userId", "email firstName lastName profileImage")
-                        .sort({ createdAt: -1 });
+        const orders = await Transaction.find({ userId: userMongo.clerkId })
+            .sort({ createdAt: -1 })
+            .exec();
 
         if (!orders || orders.length === 0) {
             return new Response(JSON.stringify({ message: "No orders found" }), {

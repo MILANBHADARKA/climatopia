@@ -21,7 +21,7 @@ app.add_middleware(
 class PredictionRequest(BaseModel):
     start_time: str  # e.g., "2025-05-27T15:00:00"
 
-@app.post("/predict")
+@app.post("/predict_electricity")
 def predict_electricity(request: PredictionRequest):
     try:
         start_datetime = datetime.fromisoformat(request.start_time)

@@ -24,16 +24,23 @@ export async function POST(request, { params }) {
     }
 
     const userId = user._id
-    const post = await Post.findById(params.id)
+
+    const postId = await params.id
+
+    if (!postId) {
+      return Response.json({ error: "Post ID is required" }, { status: 400 })
+    }
+
+    const post = await Post.findById(postId)
 
     if (!post) {
       return Response.json({ error: "Post not found" }, { status: 404 })
     }
 
-    const existingLike = post.likes.find((like) => like.user.toString() === userId)
+    const existingLike = post.likes.find((like) => like.user.toString() == userId)
 
     if (existingLike) {
-      post.likes = post.likes.filter((like) => like.user.toString() !== userId)
+      post.likes = post.likes.filter((like) => like.user.toString() != userId)
       post.likesCount = Math.max(0, post.likesCount - 1)
     } else {
       post.likes.push({ user: userId })

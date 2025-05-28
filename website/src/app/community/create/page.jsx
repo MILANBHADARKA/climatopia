@@ -6,6 +6,10 @@ import { ArrowLeft, Upload, X, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+import { useEffect } from "react";
+import { useAuth } from '@clerk/nextjs';
+import { useUser } from '@clerk/nextjs';
+import IsSignedIn from "@/components/HOC/IsSignedIn"
 
 export default function CreatePostPage() {
   const router = useRouter()
@@ -19,6 +23,14 @@ export default function CreatePostPage() {
   })
   const [imagePreview, setImagePreview] = useState(null)
   const [loading, setLoading] = useState(false)
+  const { isSignedIn, isLoaded } = useAuth();
+  const { user } = useUser();
+
+  // useEffect(() => {
+  //   if (isLoaded && !isSignedIn) {
+  //     router.push('/sign-in');
+  //   }
+  // }, [isLoaded, isSignedIn, router]);
 
   const categories = [
     { value: "climate", label: "Climate" },
@@ -85,6 +97,7 @@ export default function CreatePostPage() {
   }
 
   return (
+    <IsSignedIn>
     <div className="mt-16 min-h-screen bg-gray-50">
       {/* Header */}
       <motion.div
@@ -273,5 +286,6 @@ export default function CreatePostPage() {
         </motion.div>
       </div>
     </div>
+    </IsSignedIn>
   )
 }

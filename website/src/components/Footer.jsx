@@ -126,37 +126,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Newsletter Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="border-t border-gray-200 py-12"
-        >
-          <div className="max-w-2xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Stay updated with EarthSim.AI</h3>
-            <p className="text-gray-600 mb-8">
-              Get the latest updates on new features, research insights, and planetary simulations.
-            </p>
-
-            <div className="flex flex-col sm:flex-row max-w-md mx-auto space-y-4 sm:space-y-0 sm:space-x-4">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold transition-all duration-300"
-              >
-                Subscribe
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
-
         {/* Bottom Bar */}
         <div className="border-t border-gray-200 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
@@ -167,7 +136,7 @@ export default function Footer() {
               viewport={{ once: true }}
               className="flex items-center space-x-2 text-gray-600"
             >
-              <span>© 2024 EarthSim.AI. Made with</span>
+              <span>© 2024 Climatopia Made with</span>
               <Heart className="h-4 w-4 text-red-500" />
               <span>for our planet.</span>
             </motion.div>

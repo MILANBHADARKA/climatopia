@@ -4,23 +4,60 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Globe, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { usePathname } from "next/navigation"
 import {
   SignInButton,
   SignUpButton,
   UserButton,
-  useUser,
 } from "@clerk/clerk-react"
+import { useAuth } from '@clerk/nextjs';
+import { useUser } from '@clerk/nextjs';
+import { useEffect } from "react"
+import useCredit from "@/providers/UserCredit"
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const { isSignedIn } = useUser()
+  // const { isSignedIn } = useUser()
+  const { isSignedIn, isLoaded } = useAuth();
+  const { user } = useUser();
+  const pathname = usePathname()
+  const { userCredits, setUserCredits } = useCredit()
 
-  const navItems = [
+  const allNavItems = [
+    { name: "Home", href: "/" },
     { name: "Features", href: "#features" },
-    { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
-    { name: "Docs", href: "#docs" },
+    { name: "Community", href: "/community" },
+    { name: "Profile", href: "/profile" },
   ]
+
+  // Filter nav items based on current route
+  const navItems = allNavItems.filter((item) => {
+    if (pathname === "/") {
+      return true // Show all items on home page
+    } else {
+      return item.name !== "Features" && item.name !== "Contact"
+    }
+  })
+
+  useEffect(() => {
+    if (isSignedIn && user) {
+      fetchUserCredits()
+    }
+  }, [isSignedIn, user])
+
+  const fetchUserCredits = async () => {
+    try {
+      const res = await fetch('/api/user/credits')
+      if (res.ok) {
+        const data = await res.json()
+        setUserCredits(data.credits)
+      }
+    } catch (error) {
+      console.error('Failed to fetch credits:', error)
+    }
+  }
 
   return (
     <motion.nav
@@ -39,13 +76,16 @@ export default function Navbar() {
           >
             <div className="relative">
               {/* Replace with your actual logo */}
-              <img src="/logo.png" alt="CLIMATOPIA Logo" className="h-40 w-40 object-contain" />
+              <img
+                src="/logo.png"
+                alt="CLIMATOPIA Logo"
+                className="h-40 w-40 object-contain"
+              />
 
               {/* Optional animated icon (e.g., Zap) */}
               <Zap className="h-4 w-4 text-yellow-500 absolute -top-1 -right-1" />
             </div>
           </motion.div>
-
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -65,13 +105,33 @@ export default function Navbar() {
             ))}
           </div>
 
+
+
           {/* Auth Buttons or User Avatar */}
           <div className="hidden md:flex items-center space-x-4">
             {isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <div className="flex items-center space-x-3">
+                {/* Credits Display */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-3 py-2 rounded-full border border-blue-200"
+                >
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-semibold text-gray-700">
+                    {userCredits} Credits
+                  </span>
+                </motion.div>
+                <UserButton afterSignOutUrl="/" />
+              </div>
             ) : (
               <>
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }}>
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6 }}
+                >
                   <SignInButton mode="modal">
                     <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
                       Sign In
@@ -97,7 +157,12 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <Button variant="ghost" size="sm" onClick={() => setIsOpen(!isOpen)} className="text-gray-700">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-gray-700"
+            >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
@@ -130,7 +195,18 @@ export default function Navbar() {
               ))}
               <div className="pt-4 space-y-2">
                 {isSignedIn ? (
-                  <UserButton afterSignOutUrl="/" />
+                  <div className="space-y-3">
+                    {/* Mobile Credits Display */}
+                    <div className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-3 rounded-xl border border-blue-200">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-semibold text-gray-700">
+                        {userCredits} Credits Available
+                      </span>
+                    </div>
+                    <div className="flex justify-center">
+                      <UserButton afterSignOutUrl="/" />
+                    </div>
+                  </div>
                 ) : (
                   <>
                     <SignInButton mode="modal">

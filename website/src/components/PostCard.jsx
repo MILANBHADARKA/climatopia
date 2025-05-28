@@ -1,12 +1,12 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Heart, MessageCircle, Share2, Clock, TrendingUp, MoreHorizontal } from "lucide-react"
+import { Heart, MessageCircle, Share2, Clock, TrendingUp, MoreHorizontal, Bookmark, BookmarkCheck } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
 
-export default function PostCard({ post, onLike }) {
+export default function PostCard({ post, onLike, onSave, isSaved, saveLoading }) {
   const [isLiking, setIsLiking] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
 
@@ -161,6 +161,19 @@ export default function PostCard({ post, onLike }) {
               <Share2 size={18} />
               <span className="font-medium">Share</span>
             </motion.button>
+
+            <button
+              onClick={() => onSave(post._id)}
+              disabled={saveLoading}
+              className={`flex items-center gap-1 text-sm ${isSaved ? 'text-blue-500' : 'text-gray-500 hover:text-blue-500'}`}
+            >
+              {isSaved ? (
+                <BookmarkCheck size={16} className="text-blue-500" />
+              ) : (
+                <Bookmark size={16} />
+              )}
+              {saveLoading ? "Saving..." : isSaved ? "Saved" : "Save"}
+            </button>
           </div>
         </div>
       </div>

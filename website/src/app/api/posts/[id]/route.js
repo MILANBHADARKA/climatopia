@@ -17,7 +17,14 @@ export async function GET(request, { params }) {
 
     // Production code with MongoDB
     await connectToDB()
-    const post = await Post.findById(params.id).populate("author", "firstName lastName email").lean()
+
+    const paramsId = await params.id;
+
+    if (!paramsId) {
+      return Response.json({ error: "Post ID is required" }, { status: 400 })
+    }
+
+    const post = await Post.findById(paramsId).populate("author", "firstName lastName email").lean()
 
     if (!post) {
       return Response.json({ error: "Post not found" }, { status: 404 })
@@ -40,7 +47,13 @@ export async function DELETE(request, { params }) {
     // Production code with MongoDB
     await connectToDB()
 
-    const post = await Post.findById(params.id)
+    const paramsId = await params.id;
+
+    if (!paramsId) {
+      return Response.json({ error: "Post ID is required" }, { status: 400 })
+    }
+
+    const post = await Post.findById(paramsId)
     if (!post) {
       return Response.json({ error: "Post not found" }, { status: 404 })
     }

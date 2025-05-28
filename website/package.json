@@ -28,6 +28,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-plotly.js": "^2.6.0",
+    "react-router-dom": "^7.6.1",
     "svix": "^1.66.0",
     "tailwind-merge": "^3.3.0"
   },

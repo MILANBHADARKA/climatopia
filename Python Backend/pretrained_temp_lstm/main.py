@@ -11,7 +11,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/temperature-graph/")
+@app.get("/temperature-graph/")
 async def graph_temperature():
     try:
         from pretrained_temp_lstm import predict_temp_lstm

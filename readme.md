@@ -40,7 +40,6 @@ The project combines cutting-edge AI technologies with real-world datasets from 
   - Rainfall patterns
   - Sea level changes
   - Temperature trends
-  - Crop rate changes
   - Electricity Demand changes
   - Economic impact
   - Humidity changes

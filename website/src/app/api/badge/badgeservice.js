@@ -1,4 +1,3 @@
-// backend/badgeService.js
 import {contract} from './webthreesetup'
 const BADGE_METADATA = {
   "Climate Modeler": "ipfs://bafkreiadnktt4bxjezdhgyoqnr3nra7n62ek3bov3bvpuabbere4qtszze",
@@ -10,6 +9,10 @@ const BADGE_METADATA = {
   "Insightful Modeler": "ipfs://bafkreiblzd5mucfqun3rtudypnqiswnivtiwkjmyuh2lrjpesm4k6bjpku",
   "Bug Hunter": "ipfs://bafybeidcqxp3xkph2alq4f6refexa746lzkedyje3o66tfiwefnw77yv5u"
 };
+
+function getURLfromBadgeName(badgeName){
+    return "https://gateway.pinata.cloud/ipfs/" + BADGE_METADATA[badgeName];
+}
 
 async function mintBadgeToUser(walletAddress, badgeName) {
   try {
@@ -34,7 +37,7 @@ async function mintBadgeToUser(walletAddress, badgeName) {
     return {
       success: true,
       transactionHash: tx.hash,
-      tokenId: receipt.logs[0]?.topics[3] // Extract token ID from event
+      tokenId: parseInt(receipt.logs[0]?.topics[3], 16) // Extract token ID from event
     };
     
   } catch (error) {
@@ -64,7 +67,10 @@ async function getUserBadgeCount(walletAddress) {
 async function getAllBadgesForUser(walletAddress) {
   const tokenIds = await contract.getUserBadges(walletAddress);
   const badges = await Promise.all(tokenIds.map(id => contract.getBadgeDetails(id)));
-  return badges;
+  return badges.map(b => ({ 
+    name: b.name, 
+    timestamp: b.timestamp.toNumber(), 
+    url: getURLfromBadgeName(b.name)}));
 }
 
 

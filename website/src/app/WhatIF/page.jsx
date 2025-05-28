@@ -167,40 +167,56 @@ const EarthSimAI = () => {
     setExplanation(null);
     setScore(null);
 
+    const callApiWithRetry = async (apiCall, maxRetries = 3, delay = 1000) => {
+      let retries = 0;
+
+      while (retries < maxRetries) {
+        try {
+          const response = await apiCall();
+          return response;
+        } catch (error) {
+          retries++;
+          if (retries >= maxRetries) {
+            throw error;
+          }
+          // Wait before retrying (with exponential backoff)
+          await new Promise(resolve => setTimeout(resolve, delay * retries));
+        }
+      }
+    };
+
+
+
     try {
       // First generate a random score
 
       // Call all prediction APIs
+      const link = process.env.NEXT_PUBLIC_NGROK_URI
       const apiPromises = apiEndpoints.map(async (endpoint) => {
         try {
+
+
+
+
           if (endpoint.key === "predict_economic_impact") {
             const api = await axios.post("/api/whatif/postmethods", {
               scenario: prompt,
-              api: "https://ideal-adventure-production.up.railway.app/predict_economic_impact",
+              api: `${link}/predict_economic_impact`,
             });
             // console.log(api.data)
-            
+
             return {
               type: "prediction",
               value: api?.data?.data?.predicted_economic_impact_million_usd,
             };
-          } else if (endpoint.key === "predict_croprate") {
-            const api = await axios.post("/api/whatif/postmethods", {
-              scenario: prompt,
-              api: "https://climatopia-production.up.railway.app/predict_croprate",
-            });
-            await sleep(10000);
-            console.log(api.data.data.result.llm_predicted_crop_yield)
-            return {
-              type: "prediction",
-              value: api?.data?.data?.result.llm_predicted_crop_yield,
-            };
-          } else if (endpoint.key === "predict_electricity") {
+          }
+
+          else if (endpoint.key === "predict_electricity") {
             const today = new Date();
             const formattedDate = today.toISOString().split("T")[0];
             const api = await axios.post(`/api/whatif/postmethods`, {
               start_time: formattedDate.toString(),
-              api: "https://daring-rejoicing-production.up.railway.app/predict_electricity",
+              api: `${link}/predict_electricity`,
             });
             // console.log(api.data.data)
             return {
@@ -210,7 +226,7 @@ const EarthSimAI = () => {
           } else if (endpoint.key === "predict_adaptation") {
             const api = await axios.post(`/api/whatif/postmethods`, {
               scenario: prompt,
-              api: "https://adaption-classifier-climatopia.up.railway.app/predict_adaptation",
+              api: `${link}/predict_adaptation`,
             });
             // console.log(api.data.data)
             return {
@@ -218,29 +234,25 @@ const EarthSimAI = () => {
               value: api?.data?.data?.predicted_adaptation_strategy,
             };
           } else if (endpoint.key === "temperature_prediction") {
-            const urlprompt = encodeURIComponent(prompt);
-            const api = await fetch(
-              `https://temperature-prediction-climatopia.up.railway.app/temperature_prediction/?scenario=${urlprompt}`,
-              {
-                method: "POST",
-                headers: {
-                  accept: "application/json",
-                },
-              }
-            );
-            const data = await api.json();
+            // const urlprompt = encodeURIComponent(prompt);
+            const api = await axios.post(`/api/whatif/postmethods`, {
+              scenario: prompt,
+              api: `${link}/temperature_prediction`,
+            })
+            const data = api.data;
+            console.log(data.data)
             return {
               type: "prediction",
-              value: data?.prediction?.Temperature,
+              value: data?.data?.prediction?.Temperature,
             };
           } else if (endpoint.key === "humidity_prediction") {
             console.log(prompt);
 
             const api = await axios.post("/api/whatif/postmethods", {
-              api: "https://bountiful-imagination-production.up.railway.app/humidity_prediction/",
+              api: `${link}/humidity_prediction/`,
               scenario: prompt,
             });
-              await sleep(10000);
+            await sleep(10000);
             // console.log(api)
             const data = await api.data;
             // console.log(data)
@@ -249,69 +261,53 @@ const EarthSimAI = () => {
               value: data?.data?.prediction.predicted_humidity,
             };
           } else if (endpoint.key === "temperature-graph") {
-            const api = await axios.get(`${endpoint.url}/${endpoint.key}`);
-            // console.log(api.data.prediction)
+            const api = await axios.post(`/api/whatif/getmethods`, {
+              api: `${link}/temperature-graph`
+            });
+            console.log(api.data)
             return {
               type: "graph",
-              value: JSON.parse(api?.data?.prediction?.plotly),
+              value: JSON.parse(api?.data?.data?.prediction?.plotly),
             };
           } else if (endpoint.key === "ozone_prediction") {
-            //  const api = await fetch(
-            //   "https://climatopia-production-451e.up.railway.app/ozone_prediction",
-            //   {
-            //     method: "POST",
-            //     headers: {
-            //       Accept: "application/json",
-            //       "Content-Type": "application/json",
-            //     },
-            //     body: JSON.stringify({
-            //       scenario: prompt,
-            //     }),
-            //   }
-            // );
-            // const data = await api.json(); 
-            // return {
-            //   type: "prediction",
-            //   value: data?.prediction,
-            // };
-          } else if (endpoint.key === "geopolitical_impact") {
-            const api = await fetch(
-              "https://diligent-cooperation-production.up.railway.app/geopolitial_impact/",
-              {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  scenario: prompt,
-                }),
-              }
-            );
-
-            const data = await api.json(); 
-
-            return {
-              type: 'prediction',
-              value: data?.prediction
-            };
-          }
-          else if (endpoint.key === "geopolitical_impact") {
-            const api = await axios.post("/api/whatif/postmethods", {
-              api : "https://diligent-cooperation-production.up.railway.app/geopolitial_impact",
-              scenario : prompt
-            });
+            const api = await axios.post(`/api/whatif/postmethods`, {
+              api: `${link}/ozone_prediction`,
+              scenario: prompt
+            })
             const data = api.data;
             return {
+              type: "prediction",
+              value: data?.data?.prediction,
+            };
+          } else if (endpoint.key === "geopolitical_impact") {
+            const api = await axios.post(`/api/whatif/postmethods`, {
+              api: `${link}/geopolitical_impact`,
+              scenario: prompt
+            })
+
+            const data = api.data;
+
+            return {
               type: 'prediction',
-              value: data?.prediction // Assuming the API returns { prediction: "text" }
+              value: data?.data?.prediction
             };
           }
+          // else if (endpoint.key === "geopolitical_impact") {
+          //   const api = await axios.post("/api/whatif/postmethods", {
+          //     api : `/geopolitial_impact`,
+          //     scenario : prompt
+          //   });
+          //   const data = api.data;
+          //   return {
+          //     type: 'prediction',
+          //     value: data?.prediction // Assuming the API returns { prediction: "text" }
+          //   };
+          // }
           // Add new sentiment analysis API
           else if (endpoint.key === "analyze_sentimental_report") {
             console.log(prompt);
             const api = await axios.post("/api/whatif/postmethods", {
-              api: "https://satisfied-serenity-production.up.railway.app/analyze_sentimental_report",
+              api: `${link}/analyze_sentimental_report`,
               text: prompt,
             });
             const data = api.data;
@@ -322,6 +318,7 @@ const EarthSimAI = () => {
               value: data?.data,
             };
           }
+          // return await callApiWithRetry(apiCall);
         } catch (error) {
           console.error(`Error calling ${endpoint.name} API:`, error);
           return {
@@ -354,7 +351,7 @@ const EarthSimAI = () => {
       // Generate explanation
       try {
         const api = await axios.post("/api/whatif/postmethods", {
-          api: "https://explain-agent-climatopia.up.railway.app/explain_whatif/",
+          api: `${link}/explain_whatif/`,
           scenario: prompt,
         });
         const data = api.data;
@@ -420,7 +417,7 @@ const EarthSimAI = () => {
       question: prompt,
       answer: explanation,
       image: generatedImage,
-      score : score || 0
+      score: score || 0
     }
 
     savingWhatIf(form);
@@ -555,15 +552,14 @@ const EarthSimAI = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600">Sentiment:</span>
                       <span
-                        className={`font-medium ${
-                          results["analyze_sentimental_report"]?.value?.sentiment ===
-                          "POSITIVE"
+                        className={`font-medium ${results["analyze_sentimental_report"]?.value?.sentiment ===
+                            "POSITIVE"
                             ? "text-green-600"
                             : results["sentiment_analysis"]?.value
-                                ?.sentiment === "NEGATIVE"
-                            ? "text-red-600"
-                            : "text-yellow-600"
-                        }`}
+                              ?.sentiment === "NEGATIVE"
+                              ? "text-red-600"
+                              : "text-yellow-600"
+                          }`}
                       >
                         {results["analyze_sentimental_report"]?.value?.sentiment}
                       </span>
@@ -601,7 +597,7 @@ const EarthSimAI = () => {
                       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
                         <h4 className="font-medium text-blue-800 mb-3">Scenario Analysis</h4>
                         {/* <p className="text-gray-700"> */}
-                          <ReactMarkdown>{explanation}</ReactMarkdown>
+                        <ReactMarkdown>{explanation}</ReactMarkdown>
                         {/* </p> */}
                       </div>
                     )}

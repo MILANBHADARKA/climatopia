@@ -10,7 +10,7 @@ import {
 
 
 export const PredictionCard = ({ endpoint, data }) => {
-    const isIncrease = data.value > 0;
+    const isIncrease = data?.value > 0;
     const changeColor = isIncrease ? 'text-emerald-600' : 'text-rose-600';
     const changeIcon = isIncrease ? <ArrowUp size={16} /> : <ArrowDown size={16} />;
 
@@ -32,7 +32,7 @@ export const PredictionCard = ({ endpoint, data }) => {
           <div className="flex-grow flex items-center justify-center">
             <div className="text-center">
               <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                {data.value}
+                {data?.value}
               </div>
               <div className="text-sm text-gray-500 mt-2">Recommended Approach</div>
             </div>
@@ -54,13 +54,13 @@ export const PredictionCard = ({ endpoint, data }) => {
             </div>
             <h3 className="font-semibold text-gray-800 mb-2">{endpoint.name}</h3>
             <div className="text-3xl font-bold text-gray-900 mb-1">
-              {typeof data.value === 'number' ? data.value.toFixed(2) : data.value}
+              {typeof data?.value === 'number' ? data.value.toFixed(2) : data?.value}
               <span className="text-lg text-gray-500 ml-1">{endpoint.unit}</span>
             </div>
             <div className={`text-sm ${changeColor} flex items-center`}>
               {changeIcon}
               <span className="ml-1">
-                {Math.abs(data.value)}{endpoint.unit} {isIncrease ? 'increase' : 'decrease'}
+                {Math.abs(data?.value)}{endpoint.unit} {isIncrease ? 'increase' : 'decrease'}
               </span>
             </div>
           </div>
@@ -80,18 +80,18 @@ export const PredictionCard = ({ endpoint, data }) => {
                 r="45"
                 fill="none"
                 strokeDasharray="283"
-                strokeDashoffset={283 - (283 * Math.min(100, Math.abs(data.value))) / 100}
+                strokeDashoffset={283 - (283 * Math.min(100, Math.abs(data?.value))) / 100}
                 strokeWidth="8"
                 strokeLinecap="round"
                 initial={{ strokeDashoffset: 283 }}
-                animate={{ strokeDashoffset: 283 - (283 * Math.min(100, Math.abs(data.value))) / 100 }}
+                animate={{ strokeDashoffset: 283 - (283 * Math.min(100, Math.abs(data?.value))) / 100 }}
                 transition={{ duration: 1 }}
                 className={isIncrease ? 'stroke-emerald-500' : 'stroke-rose-500'}
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
               <span className={`text-sm font-medium ${isIncrease ? 'text-emerald-600' : 'text-rose-600'}`}>
-                {Math.min(100, Math.abs(data.value))}%
+                {Math.min(100, Math.abs(data?.value))}%
               </span>
             </div>
           </div>

@@ -31,7 +31,9 @@ export default function Navbar() {
     { name: "Pricing", href: "/pricing" },
     { name: "WhatIF", href: "/WhatIF" },
     { name: "Community", href: "/community" },
+    { name: "Save posts", href: "/save" },
     { name: "Profile", href: "/profile" },
+    { name: "Weather", href: "/weather" },
   ]
 
   // Filter nav items based on current route

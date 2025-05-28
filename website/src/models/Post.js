@@ -18,7 +18,6 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      maxLength: 2000,
     },
     score: {
       type: Number,

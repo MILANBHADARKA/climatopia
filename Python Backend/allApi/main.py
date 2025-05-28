@@ -6,12 +6,12 @@ import nltk
 from datetime import datetime
 import os
 import pandas as pd
+from pyngrok import ngrok  # Add this import
 
 # === NLTK Setup ===
 NLTK_DATA_DIR = os.path.join(os.path.dirname(__file__), 'nltk_data')
 nltk.data.path.append(NLTK_DATA_DIR)
 sid = SentimentIntensityAnalyzer()
-
 
 from pydantic import BaseModel
 
@@ -23,7 +23,6 @@ class PredictionRequest(BaseModel):
 
 class InputText(BaseModel):
     text: str
-
 
 def get_sentiment(text):
     scores = sid.polarity_scores(text)
@@ -40,7 +39,6 @@ def analyze_dataset(input_csv, output_csv):
     df.to_csv(output_csv, index=False)
     print(f"✅ Sentiment analysis complete. Results saved to: {output_csv}")
 
-
 app = FastAPI()
 
 app.add_middleware(
@@ -50,7 +48,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 @app.post("/predict_adaptation")
 def predict_adaptation(scenario: ScenarioRequest):
@@ -69,10 +66,6 @@ def get_prediction(payload: ScenarioRequest):
         return {"success": True, "result": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
 
 @app.post("/predict_economic_impact")
 def predict_economic_impact(request : ScenarioRequest):
@@ -97,7 +90,6 @@ def predict_electricity(request: PredictionRequest):
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
-
 @app.post("/explain_whatif/")
 async def explain_whatif_endpoint(scenario: ScenarioRequest):
     try:
@@ -107,7 +99,6 @@ async def explain_whatif_endpoint(scenario: ScenarioRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-
 @app.post("/geopolitial_impact/")
 async def get_geopolitial_impact(scenario: ScenarioRequest):
     try:
@@ -117,7 +108,6 @@ async def get_geopolitial_impact(scenario: ScenarioRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-
 @app.post("/ozone_prediction/")
 async def predict_ozone_endpoint(scenario: ScenarioRequest):
     try:
@@ -162,3 +152,17 @@ def analyze_text(data: InputText):
         "sentiment": sentiment,
         "score": compound
     }
+
+if __name__ == "__main__":
+    import uvicorn
+    from pyngrok import ngrok
+    
+    # Set your ngrok authtoken here
+    ngrok.set_auth_token("2xVJEPtRoeIWmpNPfnG5u1PjLk3_5iW4mZrUSjkDV42YM3Lfe")  # Replace with your actual ngrok auth token
+    
+    # Start ngrok tunnel
+    http_tunnel = ngrok.connect(8000)
+    print(f"Ngrok Tunnel URL: {http_tunnel.public_url}")
+    
+    # Run the FastAPI app with uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

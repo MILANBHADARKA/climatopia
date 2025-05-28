@@ -6,8 +6,7 @@ from dotenv import load_dotenv
 # === Load environment variables ===
 load_dotenv()
 
-# === Map LLAMA_API_KEY to GROQ_API_KEY for Groq compatibility ===
-os.environ["GROQ_API_KEY"] = os.getenv("LLAMA_API_KEY")
+
 
 # === Initialize LLaMA 3 model via Groq ===
 llm = ChatGroq(

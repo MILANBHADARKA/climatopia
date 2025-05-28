@@ -11,28 +11,27 @@ import {
   Shield,
   Send,
   Loader2,
-  BarChart3,
   Activity,
   Sparkles,
-  ArrowUp,
-  ArrowDown,
-  Share2,
   Bookmark,
-  Trophy,
-  CreditCard
+  Layers
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
-import dynamic from 'next/dynamic';
 import { useAuth, useUser } from '@clerk/nextjs';
 import useCredit from '../../providers/UserCredit';
 import { useRouter } from 'next/navigation';
-const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
+import { PredictionCard } from '@/components/whatif/Prediction';
+import { EnergyGraphCard } from '@/components/whatif/EnergyGraph';
+import { ClimateSummaryCard } from '@/components/whatif/ClimateCard';
+
 
 const EarthSimAI = () => {
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [generatedImage, setGeneratedImage] = useState(null);
+  const [explanation, setExplanation] = useState(null);
 
   const { isSignedIn } = useAuth();
   const { user } = useUser();
@@ -122,7 +121,32 @@ const EarthSimAI = () => {
       key: 'humidity_prediction',
       unit: "%",
       category: 'climate'
+    }, {
+      name: 'Ozone Impact',
+      url: process.env.NEXT_PUBLIC_OZONE_API,
+      icon: Layers,
+      color: 'from-purple-400 to-violet-600',
+      key: 'ozone_prediction',
+      unit: "DU(Dobson Unit)",
+      category: 'economic'
+    }, {
+      name: 'Geopolitical Impact',
+      url: 'https://diligent-cooperation-production.up.railway.app/geopolitial_impact',
+      icon: Globe,
+      color: 'from-green-400 to-emerald-600',
+      key: 'geopolitical_impact',
+      unit: "",
+      category: 'political'
+    }, {
+      name: 'Sentiment Analysis',
+      url: 'https://satisfied-serenity-production.up.railway.app/analyze_sentimental_report',
+      icon: Sparkles,
+      color: 'from-purple-400 to-indigo-600',
+      key: 'sentiment_analysis',
+      unit: "",
+      category: 'analysis'
     }
+
   ];
 
 
@@ -132,144 +156,191 @@ const EarthSimAI = () => {
       return;
     }
 
-    setIsLoading(true);
-    setResults(null);
-    setGeneratedImage(null);
-    setScore(null);
-
-    try {
-      const randomScore = Math.floor(Math.random() * 30) + 60;
-      setScore(randomScore);
-    } catch (error) {
-      console.error('Error calling APIs:', error);
-    } finally {
-      setIsLoading(false);
-    }
-
-
     if (!prompt.trim()) return;
 
     setIsLoading(true);
     setResults(null);
     setGeneratedImage(null);
+    setExplanation(null);
+    setScore(null);
 
     try {
-      // Your existing API call logic...
-      // Simulate API calls to all endpoints
+      // First generate a random score
+
+
+      // Call all prediction APIs
       const apiPromises = apiEndpoints.map(async (endpoint) => {
-        // Simulate API call with random data
-        if (endpoint.key === "predict_economic_impact") {
-          const api = await axios.post(`${endpoint.url}/${endpoint.key}`, {
-            scenario: prompt
-          },
-            {
+        try {
+          if (endpoint.key === "predict_economic_impact") {
+            const api = await axios.post("/api/whatif/postmethods",{
+              scenario : prompt,
+              api : "https://ideal-adventure-production.up.railway.app/predict_economic_impact"
+            })
+            // console.log(api.data)
+            return {
+              type: 'prediction',
+              value: api?.data?.data?.predicted_economic_impact_million_usd
+            };
+          } 
+          else if (endpoint.key === "predict_croprate") {
+            const api = await axios.post("/api/whatif/postmethods",{
+              scenario : prompt,
+              api : "https://climatopia-production.up.railway.app/predict_croprate"
+            })
+            // console.log(api.data)
+            return {
+              type: 'prediction',
+              value: api?.data?.data?.result.llm_predicted_crop_yield
+            };
+          } else if (endpoint.key === "predict_electricity") {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            const api = await axios.post(`/api/whatif/postmethods`, {
+              start_time: formattedDate.toString(),
+              api : "https://daring-rejoicing-production.up.railway.app/predict_electricity"
+            });
+            // console.log(api.data.data)
+            return {
+              type: 'graph',
+              value: JSON.parse(api?.data?.data)
+            };
+          } else if (endpoint.key === 'predict_adaptation') {
+            const api = await axios.post(`/api/whatif/postmethods`, {
+              scenario: prompt,
+              api : "https://adaption-classifier-climatopia.up.railway.app/predict_adaptation"
+            });
+            // console.log(api.data.data)
+            return {
+              type: 'prediction',
+              value: api?.data?.data?.predicted_adaptation_strategy
+            };
+          }
+          else if (endpoint.key === "temperature_prediction") {
+            const urlprompt = encodeURIComponent(prompt)
+            const api = await fetch(`https://temperature-prediction-climatopia.up.railway.app/temperature_prediction/?scenario=${urlprompt}`, {
+              method: 'POST',
               headers: {
-                "Content-Type": "application/json"
+                'accept': 'application/json'
               }
             });
-          const data = api.data;
-
-          return {
-            type: 'prediction',
-            value: data.predicted_economic_impact_million_usd
+            const data = await api.json();
+            return {
+              type: 'prediction',
+              value: data?.prediction?.Temperature
+            };
           }
+          else if (endpoint.key === "humidity_prediction") {
+            console.log(prompt)
 
-        } else if (endpoint.key === "predict_croprate") {
-          const api = await axios.post(`${endpoint.url}/${endpoint.key}`, {
-            scenario: prompt
-          }
-          );
-          const data = api.data;
-
-          return {
-            type: 'prediction',
-            value: data.result.llm_predicted_crop_yield
-          }
-        } else if (endpoint.key === "predict_electricity") {
-          const today = new Date();
-          const formattedDate = today.toISOString().split('T')[0];
-          console.log(formattedDate.toString);
-          const api = await axios.post(`${endpoint.url}/${endpoint.key}`, {
-            start_time: formattedDate.toString()
-          });
-          const data = api.data;
-
-          return {
-            type: 'graph',
-            value: JSON.parse(data)
-          }
-        } else if (endpoint.key === 'predict_adaptation') {
-          const api = await axios.post(`${endpoint.url}/${endpoint.key}`, {
-            scenario: prompt
-          });
-          const data = api.data;
-
-          return {
-            type: 'prediction',
-            value: data.predicted_adaptation_strategy
-          }
-
-        }
-        else if (endpoint.key === "temperature_prediction") {
-
-          const obj = {
-            scenario: prompt
-          }
-
-          const api = await fetch('https://temperature-prediction-climatopia.up.railway.app/temperature_prediction/?scenario=What%20if%20we%20boil%20earth%3F', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json'
-            }
-          })
-
-
-          const data = await api.json();
-
-          return {
-            type: 'prediction',
-            value: data?.prediction?.Temperature
-          }
-        }
-        else if (endpoint.key === "humidity_prediction") {
-          const api = await fetch('https://bountiful-imagination-production.up.railway.app/humidity_prediction/', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              scenario: "What if we boil earth?"
+            const api = await axios.post('/api/whatif/postmethods', {
+              api : "https://bountiful-imagination-production.up.railway.app/humidity_prediction/",
+              scenario : prompt
             })
-          })
 
-          const data = await  api.json();
+            // console.log(api)
+            const data = await api.data;
+            // console.log(data)
+            return {
+              type: 'prediction',
+              value: data?.data?.prediction.predicted_humidity
+            };
+          }
+          else if (endpoint.key === "temperature-graph") {
+            const api = await axios.get(`${endpoint.url}/${endpoint.key}`);
+            // console.log(api.data.prediction)
+            return {
+              type: 'graph',
+              value: JSON.parse(api?.data?.prediction?.plotly)
+            };
+          }
+          else if (endpoint.key === "ozone_prediction") {
 
-          return {
-            type: 'prediction',
-            value: data.prediction.predicted_humidity
+            const api = await axios.post('/api/whatif/postmethods', {
+              api : "https://climatopia-production-866f.up.railway.app/ozone_prediction",
+              scenario : prompt
+            });
+            const data = api.data;
+            return {
+              type: 'prediction',
+              value: data?.data?.prediction
+            };
+          }
+          else if (endpoint.key === "geopolitical_impact") {
+            const api = await axios.post("/api/whatif/postmethods", {
+              api : "https://diligent-cooperation-production.up.railway.app/geopolitial_impact",
+              scenario : prompt
+            });
+            const data = api.data;
+            return {
+              type: 'prediction',
+              value: data?.data?.prediction // Assuming the API returns { prediction: "text" }
+            };
+          }
+          // Add new sentiment analysis API
+          else if (endpoint.key === "sentiment_analysis") {
+            console.log(prompt)
+            const api = await axios.post('/api/whatif/postmethods', {
+              api : "https://satisfied-serenity-production.up.railway.app/analyze_sentimental_report",
+              text : prompt
+            });
+            const data = api.data;
+            console.log(data)
+            return {
+              type: 'sentiment',
+              value: data?.data
+            };
           }
         }
-        else if (endpoint.key === "temperature-graph") {
-          const api = await axios.get(`${endpoint.url}/${endpoint.key}`);
-          const data = api.data;
-
+        catch (error) {
+          console.error(`Error calling ${endpoint.name} API:`, error);
           return {
-            type: 'graph',
-            value: JSON.parse(data.prediction.plotly)
-          }
+            type: 'error',
+            error: `Failed to get ${endpoint.name} data`
+          };
         }
       });
 
       const apiResults = await Promise.all(apiPromises);
-      const resultsMap = {};
 
+      // Check if any API failed
+      const hasErrors = apiResults.some(result => result?.type === 'error');
+
+      if (hasErrors) {
+        alert("Question is not appropriate or some services are unavailable. Please try a different scenario.");
+        return;
+      }
+
+      // Build results map
+      const resultsMap = {};
       apiEndpoints.forEach((endpoint, index) => {
         resultsMap[endpoint.key] = apiResults[index];
       });
 
       setResults(resultsMap);
 
+      // Generate explanation
+      try {
+        const api = await axios.post('/api/whatif/postmethods', {
+          api : "https://explain-agent-climatopia.up.railway.app/explain_whatif/",
+          scenario : prompt
+        });
+        const data = api.data;
+        setExplanation(data?.data?.prediction);
+      } catch (error) {
+        console.error('Error generating explanation:', error);
+      }
+
+      // Generate image
+      try {
+        const imageRes = await axios.post('/api/image_generate', {
+          prompt,
+        });
+        setGeneratedImage(imageRes.data.imageUrl);
+      } catch (error) {
+        console.error('Error generating image:', error);
+      }
+
+      // Deduct credits only if all APIs succeeded
       try {
         await axios.post('/api/user/credits', {
           amount: 10
@@ -279,13 +350,9 @@ const EarthSimAI = () => {
         console.error('Error deducting credit:', error);
       }
 
-      // Simulate image generation
-      setTimeout(() => {
-        setGeneratedImage(`https://picsum.photos/600/400?random=${Date.now()}`);
-      }, 1000);
-
     } catch (error) {
       console.error('Error calling APIs:', error);
+      alert("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -324,239 +391,6 @@ const EarthSimAI = () => {
 
     savingWhatIf(form);
   }
-
-
-  const ClimateSummaryCard = () => {
-    if (!results) return null;
-
-    const tempData = results['temperature_prediction'];
-    const humidityData = results['humidity_prediction'];
-    const tempGraphData = results['temperature-graph'];
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 col-span-2"
-      >
-        <div className="flex items-center space-x-3 mb-6">
-          <div className="p-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white">
-            <Thermometer size={24} />
-          </div>
-          <h3 className="font-semibold text-gray-800 text-xl">Climate Overview</h3>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Temperature and Humidity Indicators */}
-          <div className="space-y-6">
-            <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-5 border border-red-100">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-medium text-red-600">Temperature</span>
-                <span className="text-sm bg-red-100 text-red-800 px-3 py-1 rounded-full flex items-center">
-                  {tempData?.value > 0 ? <ArrowUp size={16} className="mr-1" /> : <ArrowDown size={16} className="mr-1" />}
-                  {tempData?.value?.toFixed(1)}°C
-                </span>
-              </div>
-              <div className="relative h-2 bg-red-100 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.min(100, Math.abs(tempData?.value) * 10)}%` }}
-                  transition={{ duration: 1 }}
-                  className="absolute h-full bg-gradient-to-r from-rose-400 to-pink-500 rounded-full"
-                />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-medium text-blue-600">Humidity</span>
-                <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-                  {humidityData?.value?.toFixed(1)}%
-                </span>
-              </div>
-              <div className="relative h-2 bg-blue-100 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.min(100, Math.abs(humidityData?.value))}%` }}
-                  transition={{ duration: 1 }}
-                  className="absolute h-full bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Temperature Graph - Wider */}
-          <div className="lg:col-span-2 h-full">
-            {tempGraphData?.value ? (
-              <Plot
-                data={tempGraphData.value.data}
-                layout={{
-                  ...tempGraphData.value.layout,
-                  autosize: true,
-                  margin: { l: 60, r: 30, b: 60, t: 30, pad: 4 },
-                  height: 300,
-                  plot_bgcolor: 'rgba(0,0,0,0)',
-                  paper_bgcolor: 'rgba(0,0,0,0)',
-                  font: { family: 'Inter, sans-serif', color: '#4b5563' },
-                  xaxis: { gridcolor: 'rgba(0,0,0,0.05)' },
-                  yaxis: { gridcolor: 'rgba(0,0,0,0.05)' }
-                }}
-                config={{ displayModeBar: false }}
-                useResizeHandler={true}
-                style={{ width: '100%', height: '100%' }}
-              />
-            ) : (
-              <div className="h-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center">
-                <div className="text-center">
-                  <BarChart3 size={48} className="text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-600">Loading climate data...</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
-
-  const PredictionCard = ({ endpoint, data }) => {
-    const isIncrease = data.value > 0;
-    const changeColor = isIncrease ? 'text-emerald-600' : 'text-rose-600';
-    const changeIcon = isIncrease ? <ArrowUp size={16} /> : <ArrowDown size={16} />;
-
-    // Special handling for Adaptation Strategy
-    if (endpoint.key === 'predict_adaptation') {
-      return (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 h-full flex flex-col"
-        >
-          <div className="flex items-center space-x-3 mb-4">
-            <div className={`p-3 rounded-xl bg-gradient-to-r ${endpoint.color} text-white`}>
-              <endpoint.icon size={20} />
-            </div>
-            <h3 className="font-semibold text-gray-800">{endpoint.name}</h3>
-          </div>
-
-          <div className="flex-grow flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                {data.value}
-              </div>
-              <div className="text-sm text-gray-500 mt-2">Recommended Approach</div>
-            </div>
-          </div>
-        </motion.div>
-      );
-    }
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 h-full"
-      >
-        <div className="flex items-start justify-between h-full">
-          <div>
-            <div className={`p-3 rounded-xl bg-gradient-to-r ${endpoint.color} text-white inline-block mb-4`}>
-              <endpoint.icon size={20} />
-            </div>
-            <h3 className="font-semibold text-gray-800 mb-2">{endpoint.name}</h3>
-            <div className="text-3xl font-bold text-gray-900 mb-1">
-              {typeof data.value === 'number' ? data.value.toFixed(2) : data.value}
-              <span className="text-lg text-gray-500 ml-1">{endpoint.unit}</span>
-            </div>
-            <div className={`text-sm ${changeColor} flex items-center`}>
-              {changeIcon}
-              <span className="ml-1">
-                {Math.abs(data.value)}{endpoint.unit} {isIncrease ? 'increase' : 'decrease'}
-              </span>
-            </div>
-          </div>
-          <div className="relative w-20 h-20">
-            <svg className="w-full h-full" viewBox="0 0 100 100">
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke="#e5e7eb"
-                strokeWidth="8"
-              />
-              <motion.circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                strokeDasharray="283"
-                strokeDashoffset={283 - (283 * Math.min(100, Math.abs(data.value))) / 100}
-                strokeWidth="8"
-                strokeLinecap="round"
-                initial={{ strokeDashoffset: 283 }}
-                animate={{ strokeDashoffset: 283 - (283 * Math.min(100, Math.abs(data.value))) / 100 }}
-                transition={{ duration: 1 }}
-                className={isIncrease ? 'stroke-emerald-500' : 'stroke-rose-500'}
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className={`text-sm font-medium ${isIncrease ? 'text-emerald-600' : 'text-rose-600'}`}>
-                {Math.min(100, Math.abs(data.value))}%
-              </span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
-
-  const EnergyGraphCard = ({ endpoint, data }) => {
-    const plotlyData = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 col-span-2"
-      >
-        <div className="flex items-center space-x-3 mb-6">
-          <div className={`p-3 rounded-xl bg-gradient-to-r ${endpoint.color} text-white`}>
-            <endpoint.icon size={20} />
-          </div>
-          <h3 className="font-semibold text-gray-800">{endpoint.name}</h3>
-        </div>
-
-        <div className="h-80">
-          {plotlyData ? (
-            <Plot
-              data={plotlyData.data}
-              layout={{
-                ...plotlyData.layout,
-                autosize: true,
-                margin: { l: 60, r: 30, b: 60, t: 30, pad: 4 },
-                height: 300,
-                plot_bgcolor: 'rgba(0,0,0,0)',
-                paper_bgcolor: 'rgba(0,0,0,0)',
-                font: { family: 'Inter, sans-serif', color: '#4b5563' },
-                xaxis: { gridcolor: 'rgba(0,0,0,0.05)' },
-                yaxis: { gridcolor: 'rgba(0,0,0,0.05)' }
-              }}
-              config={{ displayModeBar: false }}
-              useResizeHandler={true}
-              style={{ width: '100%', height: '100%' }}
-            />
-          ) : (
-            <div className="h-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center">
-              <div className="text-center">
-                <BarChart3 size={48} className="text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-600">Loading energy data...</p>
-              </div>
-            </div>
-          )}
-        </div>
-      </motion.div>
-    );
-  };
 
 
   return (
@@ -670,49 +504,120 @@ const EarthSimAI = () => {
             className="space-y-8"
           >
 
-            {score && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="max-w-4xl mx-auto bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl p-6 shadow-lg border border-amber-100"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="p-3 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-xl text-white">
-                      <Trophy size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-800">Simulation Score</h3>
-                      <p className="text-sm text-gray-600">Your scenario effectiveness rating</p>
-                    </div>
+            {/* Sentiment Analysis Card */}
+            {results['sentiment_analysis'] && (
+              <div className="col-span-1 lg:col-span-2">
+                <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 h-full">
+                  <div className="flex items-center mb-4">
+                    <Sparkles className="mr-2 text-purple-500" />
+                    <h4 className="text-lg font-semibold text-gray-800">Scenario Sentiment Analysis</h4>
                   </div>
-                  <div className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-yellow-700 bg-clip-text text-transparent">
-                    {score}/100
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600">Sentiment:</span>
+                      <span className={`font-medium ${results['sentiment_analysis']?.value?.sentiment === 'POSITIVE' ? 'text-green-600' :
+                        results['sentiment_analysis']?.value?.sentiment === 'NEGATIVE' ? 'text-red-600' :
+                          'text-yellow-600'
+                        }`}>
+                        {results['sentiment_analysis']?.value?.sentiment}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600">Score:</span>
+                      <span className="font-medium text-gray-800">
+                        {Math.round(results['sentiment_analysis']?.value?.score * 100)}%
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             )}
+
+
             {/* Generated Image */}
-
-
-            {generatedImage && (
+            {(explanation || generatedImage) && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
-                className="max-w-4xl mx-auto"
+                className="max-w-6xl mx-auto"
               >
                 <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 overflow-hidden">
                   <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
                     <Sparkles className="mr-2 text-yellow-500" />
-                    AI Generated Visualization
+                    AI Analysis Summary
                   </h3>
-                  <div className="rounded-xl overflow-hidden border border-gray-200">
-                    <img
-                      src={generatedImage}
-                      alt="AI Generated Climate Scenario"
-                      className="w-full h-96 object-cover"
-                    />
+
+                  <div className="flex flex-col h-full gap-6">
+                    {explanation && (
+                      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
+                        <h4 className="font-medium text-blue-800 mb-3">Scenario Analysis</h4>
+                        <p className="text-gray-700">
+                          <ReactMarkdown>{explanation}</ReactMarkdown>
+                        </p>
+                      </div>
+                    )}
+
+                    {generatedImage && (
+                      <div className="space-y-4">
+                        <div className="rounded-xl overflow-hidden border border-gray-200">
+                          <img
+                            src={generatedImage}
+                            alt="AI Generated Climate Scenario"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                          <p className="text-sm text-gray-500">
+                            <span className="font-medium">5 credits</span> for generating a new image
+                          </p>
+
+                          <motion.button
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={async () => {
+                              if (userCredits < 5) {
+                                alert("You don't have enough credits to generate a new image");
+                                return;
+                              }
+                              setIsLoading(true);
+                              try {
+                                const imageRes = await axios.post('/api/image_generate', {
+                                  prompt,
+                                });
+                                setGeneratedImage(imageRes.data.imageUrl);
+
+                                // Deduct credits
+                                await axios.post('/api/user/credits', {
+                                  amount: 5
+                                });
+                                setUserCredits(prev => prev - 5);
+                              } catch (error) {
+                                console.error('Error generating image:', error);
+                                alert("Failed to generate new image");
+                              } finally {
+                                setIsLoading(false);
+                              }
+                            }}
+                            disabled={isLoading}
+                            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 disabled:opacity-50"
+                          >
+                            {isLoading ? (
+                              <>
+                                <Loader2 className="animate-spin h-4 w-4" />
+                                Generating...
+                              </>
+                            ) : (
+                              <>
+                                <Sparkles className="h-4 w-4" />
+                                Generate New Image
+                              </>
+                            )}
+                          </motion.button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -730,7 +635,7 @@ const EarthSimAI = () => {
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Climate Summary Card (2 columns) */}
-                <ClimateSummaryCard />
+                <ClimateSummaryCard results={results} />
 
                 {/* Economic Impact Card */}
                 {results['predict_economic_impact'] && (
@@ -763,7 +668,22 @@ const EarthSimAI = () => {
                   </div>
 
                 )}
+
               </div>
+              {/* Geopolitical Impact Card */}
+              {results['geopolitical_impact'] && (
+                <div className="col-span-1">
+                  <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 h-full">
+                    <div className="flex items-center mb-4">
+                      <Globe className="mr-2 text-green-500" />
+                      <h4 className="text-lg font-semibold text-gray-800">Geopolitical Impact</h4>
+                    </div>
+                    <div className="prose prose-sm max-w-none text-gray-700">
+                      <ReactMarkdown>{results['geopolitical_impact'].value}</ReactMarkdown>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

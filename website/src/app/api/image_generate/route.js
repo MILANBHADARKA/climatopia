@@ -1,29 +1,78 @@
-import fetch from 'node-fetch';
+import { GoogleGenAI, Modality } from "@google/genai";
+import { v2 as cloudinary } from 'cloudinary';
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+// Configure Cloudinary
+cloudinary.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET 
+});
 
+export async function POST(request) {
   try {
-    const { prompt } = req.body;
+    const { prompt } = await request.json();
     
-    // Here you would call your actual image generation API
-    // For now, we'll simulate it with a placeholder
-    // const response = await fetch('https://api.unsplash.com/photos/random', {
-    //   headers: {
-    //     'Authorization': `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`
-    //   }
-    // });
-    
-    // const data = await response.json();
-    
-    res.status(200).json({ 
-      url: prompt,
-      alt: prompt 
+    if (!prompt) {
+      return new Response(JSON.stringify({ error: "Prompt is required" }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const redifined_prompt = prompt + "It is for whatif question image generation so for that generate image like imagination  ";
+
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_KEY });
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash-preview-image-generation",
+      contents: redifined_prompt,
+      config: {
+        responseModalities: [Modality.TEXT, Modality.IMAGE],
+      },
     });
+
+    // Find the image part in the response
+    const imagePart = response.candidates[0].content.parts.find(
+      part => part.inlineData
+    );
+
+    if (!imagePart) {
+      return new Response(JSON.stringify({ error: "No image generated" }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Convert base64 to buffer
+    const imageBuffer = Buffer.from(imagePart.inlineData.data, "base64");
+
+    // Upload to Cloudinary
+    const cloudinaryResult = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "gemini-images" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      
+      uploadStream.end(imageBuffer);
+    });
+
+    return new Response(JSON.stringify({ 
+      imageUrl: cloudinaryResult.secure_url 
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
   } catch (error) {
-    console.error('Error generating image:', error);
-    res.status(500).json({ error: 'Failed to generate image' });
+    console.error("Error generating image:", error);
+    return new Response(JSON.stringify({ 
+      error: "Failed to generate image" 
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }

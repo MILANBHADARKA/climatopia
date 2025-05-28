@@ -39,7 +39,11 @@ The project combines cutting-edge AI technologies with real-world datasets from 
   - Rainfall patterns
   - Sea level changes
   - Temperature trends
-- **Visual Analytics**: Dynamic graphs and interactive charts for data visualization
+  - Crop rate changes
+  - Electricity Demand changes
+  - Economic impact
+  - Humidity changes
+- **Visual Analytics**: Dynamic graphs and interactive charts for data visualization using Plotly
 
 ### 🤔 "What If" Scenario Engine
 - **Natural Language Queries**: Users ask hypothetical climate questions
@@ -149,8 +153,7 @@ Climatopia/
 ### Core Modules:
 
 1. **Simulation Engine (Python)**
-   - Multi-Agent Reinforcement Learning with Ray RLlib/PettingZoo
-   - Graph Neural Networks for modeling interdependencies using PyTorch Geometric/DGL
+   - Multi-Agent Reinforcement Learning to improve Agent feedbacks
    - Physics-Informed Neural Networks for accurate physical modeling
    - FastAPI server for exposing simulation capabilities
 
@@ -168,10 +171,11 @@ Climatopia/
    - Subscription management dashboard
    - Real-time weather monitoring
 
-4. **GenAI Module**
+4. **AI/ML Models**
    - LLM-powered explanations of simulation results
    - Chain-of-thought reasoning for transparent analysis
    - Natural language processing for "What If" queries
+   - Sentimental Analysis of "What if" queries.
 
 5. **Authentication & User Management**
    - Clerk integration for secure authentication
@@ -208,7 +212,7 @@ Climatopia/
 ### AI/ML Engine
 - **Language**: Python
 - **Framework**: FastAPI
-- **ML Libraries**: PyTorch, scikit-learn, XGBoost
+- **ML Libraries**: PyTorch, scikit-learn, XGBoost, tensorflow, transformers, langchain, NLTK
 - **Data Processing**: Pandas, NumPy
 - **Visualization**: Matplotlib, Plotly
 
@@ -242,10 +246,6 @@ The ML engine relies on the following key Python packages:
 
 - **FastAPI**: Web framework for API development
 - **PyTorch**: Deep learning framework
-- **PyTorch Geometric**: Graph neural network library
-- **Ray RLlib**: Distributed reinforcement learning
-- **PettingZoo**: Multi-agent reinforcement learning environments
-- **SciANN**: Scientific computing with neural networks
 - **NumPy/Pandas**: Data manipulation and analysis
 - **Matplotlib/Plotly**: Data visualization
 - **LangChain**: LLM integration framework
@@ -407,7 +407,7 @@ Climatopia/
 ### Core Modules:
 
 1. **Simulation Engine (Python)**
-   - Multi-Agent Reinforcement Learning with Ray RLlib/PettingZoo
+   - Multi-Agent Reinforcement Learning 
    - Graph Neural Networks for modeling interdependencies using PyTorch Geometric/DGL
    - Physics-Informed Neural Networks for accurate physical modeling
    - FastAPI server for exposing simulation capabilities
@@ -428,6 +428,7 @@ Climatopia/
    - LLM-powered explanations of simulation results
    - Chain-of-thought reasoning for transparent analysis
    - Natural language processing for scenario creation
+   - Sentimental Analysis of "What if" queries.
 
 5. **Subscription & Credit System**
    - Tiered access model (Free/Pro/NGO)

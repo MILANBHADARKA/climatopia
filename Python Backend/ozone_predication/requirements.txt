@@ -4,3 +4,4 @@ scikit-learn
 langchain_groq
 dotenv
 fastapi
+uvicorn

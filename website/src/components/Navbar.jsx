@@ -16,7 +16,6 @@ import { useEffect } from "react"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  // const { isSignedIn } = useUser()
   const { isSignedIn, isLoaded } = useAuth();
   const { user } = useUser();
   const pathname = usePathname()
@@ -26,6 +25,7 @@ export default function Navbar() {
     { name: "Home", href: "/" },
     { name: "Features", href: "#features" },
     { name: "Contact", href: "#contact" },
+    { name: "Pricing", href: "/pricing" },
     { name: "Community", href: "/community" },
     { name: "Profile", href: "/profile" },
   ]
@@ -39,12 +39,6 @@ export default function Navbar() {
     }
   })
 
-  useEffect(() => {
-    if (isSignedIn && user) {
-      fetchUserCredits()
-    }
-  }, [isSignedIn, user])
-
   const fetchUserCredits = async () => {
     try {
       const res = await fetch('/api/user/credits')
@@ -56,6 +50,41 @@ export default function Navbar() {
       console.error('Failed to fetch credits:', error)
     }
   }
+
+  useEffect(() => {
+    if (isSignedIn && user) {
+      fetchUserCredits()
+      
+      // Set up periodic refresh every 30 seconds
+      // const intervalId = setInterval(() => {
+      //   fetchUserCredits()
+      // }, 30000)
+
+      // Listen for custom credit update events
+      const handleCreditUpdate = () => {
+        fetchUserCredits()
+      }
+
+      window.addEventListener('creditUpdated', handleCreditUpdate)
+
+      return () => {
+        // clearInterval(intervalId)
+        window.removeEventListener('creditUpdated', handleCreditUpdate)
+      }
+    }
+  }, [isSignedIn, user])
+
+  // Listen for focus events to refresh credits when user comes back to tab
+  useEffect(() => {
+    const handleFocus = () => {
+      if (isSignedIn && user) {
+        fetchUserCredits()
+      }
+    }
+
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [isSignedIn, user])
 
   return (
     <motion.nav
@@ -103,20 +132,25 @@ export default function Navbar() {
             ))}
           </div>
 
-
-
           {/* Auth Buttons or User Avatar */}
           <div className="hidden md:flex items-center space-x-4">
             {isSignedIn ? (
               <div className="flex items-center space-x-3">
-                {/* Credits Display */}
+                {/* Credits Display with enhanced animation */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 }}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-3 py-2 rounded-full border border-blue-200"
+                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-3 py-2 rounded-full border border-blue-200 cursor-pointer"
+                  whileHover={{ scale: 1.05 }}
+                  onClick={fetchUserCredits}
+                  title="Click to refresh credits"
                 >
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <motion.div 
+                    className="w-2 h-2 bg-green-500 rounded-full"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
                   <span className="text-sm font-semibold text-gray-700">
                     {userCredits} Credits
                   </span>
@@ -194,13 +228,21 @@ export default function Navbar() {
               <div className="pt-4 space-y-2">
                 {isSignedIn ? (
                   <div className="space-y-3">
-                    {/* Mobile Credits Display */}
-                    <div className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-3 rounded-xl border border-blue-200">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    {/* Mobile Credits Display with refresh capability */}
+                    <motion.div 
+                      className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-3 rounded-xl border border-blue-200 cursor-pointer"
+                      whileTap={{ scale: 0.95 }}
+                      onClick={fetchUserCredits}
+                    >
+                      <motion.div 
+                        className="w-2 h-2 bg-green-500 rounded-full"
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
                       <span className="text-sm font-semibold text-gray-700">
                         {userCredits} Credits Available
                       </span>
-                    </div>
+                    </motion.div>
                     <div className="flex justify-center">
                       <UserButton afterSignOutUrl="/" />
                     </div>

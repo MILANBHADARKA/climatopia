@@ -209,30 +209,49 @@ const EarthSimAI = () => {
             value: data.predicted_adaptation_strategy
           }
 
-        } else if (endpoint.key === "temperature_prediction") {
-          const api = await axios.post(`${endpoint.url}/${endpoint.key}`, {
+        }
+        else if (endpoint.key === "temperature_prediction") {
+
+          const obj = {
             scenario: prompt
-          });
-          const data = api.data;
+          }
+
+          const api = await fetch('https://temperature-prediction-climatopia.up.railway.app/temperature_prediction/?scenario=What%20if%20we%20boil%20earth%3F', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json'
+            }
+          })
+
+
+          const data = await api.json();
 
           return {
             type: 'prediction',
-            value: data.prediction.Temperature
+            value: data?.prediction?.Temperature
           }
         }
         else if (endpoint.key === "humidity_prediction") {
-          // Mock prediction data
-          const api = await axios.post(`${endpoint.url}/${endpoint.key}`, {
-            scenario: prompt
-          });
-          const data = api.data;
+          const api = await fetch('https://bountiful-imagination-production.up.railway.app/humidity_prediction/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              scenario: "What if we boil earth?"
+            })
+          })
+
+          const data = await  api.json();
 
           return {
             type: 'prediction',
             value: data.prediction.predicted_humidity
           }
-        } else if (endpoint.key === "temperature-graph") {
-          const api = await axios.post(`${endpoint.url}/${endpoint.key}`);
+        }
+        else if (endpoint.key === "temperature-graph") {
+          const api = await axios.get(`${endpoint.url}/${endpoint.key}`);
           const data = api.data;
 
           return {
@@ -288,8 +307,8 @@ const EarthSimAI = () => {
     makeAPost(form)
   }
 
-  const savingWhatIf = async(form) => {
-    await axios.post("/api/saved/whatifs" ,form);
+  const savingWhatIf = async (form) => {
+    await axios.post("/api/saved/whatifs", form);
     router.push("/save");
   }
 
@@ -298,9 +317,9 @@ const EarthSimAI = () => {
 
     const form = {
       title,
-      question : prompt,
-      answer : prompt,
-      score 
+      question: prompt,
+      answer: prompt,
+      score
     }
 
     savingWhatIf(form);
@@ -758,14 +777,14 @@ const EarthSimAI = () => {
             className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg py-4 px-6"
           >
             <div className="container mx-auto flex justify-between items-center">
-              
-                <button
+
+              <button
                 onClick={savedWhatif}
                 className="hover:cursor-pointer flex items-center space-x-2 text-gray-700 hover:text-gray-900">
-                  <Bookmark size={18} />
-                  <span>Save</span>
-                </button>
-              
+                <Bookmark size={18} />
+                <span>Save</span>
+              </button>
+
 
               <div className="flex space-x-4">
 

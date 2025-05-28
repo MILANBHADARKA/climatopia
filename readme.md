@@ -36,6 +36,7 @@ The project combines cutting-edge AI technologies with real-world datasets from 
 - **Custom ML Models**: Trained on historical weather and climate datasets
 - **Predictive Analytics**: Forecast future conditions including:
   - Wind speed and direction
+  - Ozone Layer changes
   - Rainfall patterns
   - Sea level changes
   - Temperature trends
@@ -52,6 +53,7 @@ The project combines cutting-edge AI technologies with real-world datasets from 
   - Historical data analysis
   - ML model predictions
   - Real-time weather conditions
+  - Agentic explanation using Reinforcement Learning
 - **Multi-format Answers**: Responses delivered via text, charts, or interactive visualizations
 
 ### 👥 Social Community Features

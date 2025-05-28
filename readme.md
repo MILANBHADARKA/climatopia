@@ -270,3 +270,6 @@ Full requirements can be found in `Python Backend/requirements.txt`
 
 **Team**: T3Coders  
 **Project**: Climatopia - Hackathon Entry
+<p align="center">© 2025 Climatopia Team. All rights reserved.</p>
+
+<CodeProject id="earthsim_project">

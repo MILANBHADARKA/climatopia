@@ -42,11 +42,11 @@ export default function RootLayout({ children }) {
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <UserCreditContextProvider>
             <MetaMaskProvider>
-              <MetaMaskGate>
+              
                 <Navbar />
                 {children}
                 <Footer />
-              </MetaMaskGate>
+              
             </MetaMaskProvider>
             <Script src="https://checkout.razorpay.com/v1/checkout.js" />
           </UserCreditContextProvider>

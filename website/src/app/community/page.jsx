@@ -268,7 +268,7 @@ export default function CommunityPage() {
                 <h1 className="text-2xl font-bold text-gray-900">Community</h1>
                 <p className="text-gray-600">Explore "What If" scenarios from our community</p>
               </div>
-              <Link href="/community/create">
+              <Link href="/WhatIF">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -354,7 +354,7 @@ export default function CommunityPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No posts yet</h3>
               <p className="text-gray-600 mb-6">Be the first to share a "What If" scenario!</p>
-              <Link href="/community/create">
+              <Link href="/WhatIF">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

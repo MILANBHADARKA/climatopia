@@ -1,0 +1,88 @@
+graph TB
+    %% User Interaction Layer
+    U["User"]
+    U -->|Access via| UI["Browser - Mobile/Desktop"]
+
+    %% Frontend
+    UI --> FE["Frontend (Next.js 14)"]
+    FE --> HERO["Hero Section"]
+    FE --> FEATURES["Features Page"]
+    FE --> PRICING["Pricing Page"]
+    FE --> WEATHER["Weather Dashboard"]
+    FE --> WHATIF["What If Page"]
+    FE --> SOCIAL["Social Feed"]
+    FE --> PROFILE["User Profile"]
+
+    %% Authentication
+    FE --> CLERK["Clerk Auth"]
+    CLERK --> USERMGMT["User Management"]
+    USERMGMT --> CREDITS["Credit System"]
+
+    %% Backend APIs
+    FE --> USERAPI["/api/user/*"]
+    FE --> POSTAPI["/api/posts/*"]
+    FE --> CREDITSAPI["/api/credits/*"]
+    FE --> PAYMENTAPI["/api/payments/*"]
+    FE --> STATSAPI["Stats API"]
+
+    %% Database
+    USERAPI --> MONGO["MongoDB Atlas"]
+    POSTAPI --> MONGO
+    CREDITSAPI --> MONGO
+    MONGO --> USERMODEL["User Model"]
+    MONGO --> POSTMODEL["Post Model"]
+    MONGO --> CREDITMODEL["Credit Model"]
+
+    %% Python ML Backend
+    WHATIF --> FASTAPI["FastAPI Backend"]
+    FASTAPI --> TEMPAPI["Temperature Prediction"]
+    FASTAPI --> HUMIDAPI["Humidity Prediction"]
+    FASTAPI --> ECOAPI["Economic Impact"]
+    FASTAPI --> CROPAPI["Crop Forecast"]
+    FASTAPI --> ELECTRICAPI["Electricity Demand"]
+    FASTAPI --> ADAPTAPI["Adaptation Model"]
+
+    %% ML Engine Models & Data
+    TEMPAPI --> LSTM["LSTM Model"]
+    HUMIDAPI --> XGBOOST["XGBoost"]
+    ECOAPI --> XGBOOST
+    CROPAPI --> XGBOOST
+    ELECTRICAPI --> XGBOOST
+    ADAPTAPI --> DATASETS["Climate Datasets"]
+
+    %% Real-time Weather & External Data
+    WEATHER --> WEATHERAPI["Weather API"]
+    FASTAPI --> NASA["NASA Climate Data"]
+    FASTAPI --> NOAA["NOAA Data"]
+
+    %% Media Storage
+    FE --> CLOUDINARY["Cloudinary Storage"]
+
+    %% Payments
+    PAYMENTAPI --> STRIPE["Stripe Payments"]
+
+    %% Web3 Integration
+    SOCIAL --> BADGES["NFT Badges"]
+    BADGES --> WALLET["Wallet Integration"]
+    BADGES --> SMART_CONTRACT["Smart Contracts"]
+    SMART_CONTRACT --> IPFS["IPFS Metadata"]
+
+    %% Social Features
+    SOCIAL --> FEED["Feed"]
+    FEED --> LIKES["Like System"]
+    FEED --> COMMENTS["Comments"]
+    LIKES --> ACHIEVEMENTS["Achievement Badges"]
+
+    %% Deployment
+    FE --> VERCEL["Deployed on Vercel"]
+    FASTAPI --> RAILWAY["Deployed on Railway"]
+
+    %% GenAI NLP
+    WHATIF --> GENAI["LLM Module (LangChain)"]
+    GENAI --> FASTAPI
+    GENAI --> VISUALS["Interactive Charts"]
+
+    %% Styling & Frameworks
+    FE --> TAILWIND["Tailwind CSS"]
+    FE --> FRAMER["Framer Motion"]
+    FE --> CHARTS["Chart.js / Recharts"]

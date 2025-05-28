@@ -1,27 +1,26 @@
-from diffusers import StableDiffusionPipeline
 import torch
+from diffusers import FluxPipeline
 import os
+import google.generativeai as genai
+
+
+
 
 def generateImage(prompt):
-    model_id = "sd-legacy/stable-diffusion-v1-5"
-    pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
-    pipe = pipe.to("cpu")
 
-    formatted_prompt = f"""
-    Generate an image according to the prompt given.
-    The image should describe the effect on the climate due to the prompt.
+
+    pipe = FluxPipeline.from_pretrained("black-forest-labs/FLUX.1-schnell", torch_dtype=torch.bfloat16)
+    pipe.enable_model_cpu_offload() #save some VRAM by offloading the model to CPU. Remove this if you have enough GPU power
+
     
-    Prompt: {prompt}
-    """
+    image = pipe(
+        prompt,
+        guidance_scale=0.0,
+        num_inference_steps=4,
+        max_sequence_length=256,
+        generator=torch.Generator("cpu").manual_seed(0)
+    ).images[0]
+    image.save("flux-schnell.png")
 
-    image = pipe(formatted_prompt).images[0]
-
-    # Ensure the 'images' directory exists
-    os.makedirs("images", exist_ok=True)
-
-    # Safe filename (removes spaces and special characters)
-    safe_filename = "_".join(prompt.strip().split())[:100]
-
-    image_path = os.path.join("images", f"{safe_filename}.png")
-    image.save(image_path)
-    print(f"Image saved at: {image_path}")
+prompt = "A cat holding a sign that says hello world"
+generateImage(prompt)

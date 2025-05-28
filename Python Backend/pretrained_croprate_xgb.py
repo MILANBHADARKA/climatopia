@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 import os
-from LLM import run_climate_scenario_prediction  # import your LLM function
+from LLM import run_climate_scenario_prediction
 
 def predict_croprate(scenario):
     

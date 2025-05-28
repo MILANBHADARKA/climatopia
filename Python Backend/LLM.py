@@ -4,13 +4,14 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 # from image_generation import generateImage
+from Sentimental_analysis.sentiments import analyze_sentence
 
 from dotenv import load_dotenv
 import os
 
 load_dotenv()  # This loads variables from .env into environment
 
-api_key = os.getenv("GROQ_API_KEY")
+api_key = os.getenv("LLAMA_API_KEY")
 # Initialize LLM
 llm = ChatGroq(
     model_name="llama3-70b-8192",  # You can also try "llama3-8b-8192"
@@ -39,6 +40,14 @@ Estimate the impact on the following indicators:
 - Soil_Health_Index (0-100)
 -solar power generated (MWH)
 -Temperature (celcius)
+-pressure_height
+-Temperature_Sandburg(farenhite)
+-Temperature_ElMonte(farenhite)
+-Inversion_base_height
+-Pressure_gradient
+-Inversion_temperature
+-Visibility(50-200)
+
 
 only "meantemp" can be negative. every other thing should be positive.
 
@@ -58,6 +67,15 @@ Output format:
   "Soil_Health_Index": float
   "solar_generation": float
   "Temperature": float
+  "pressure_height": float
+   "Temperature_Sandburg": float
+    "Temperature_ElMonte": float
+"Inversion_base_height": float
+"Pressure_gradient": float
+"Inversion_temperature": float
+"Visibility": float
+"Humidity": float
+"Wind_speed": float
 }}
 Only return valid JSON. No explanation.
 """)
@@ -75,9 +93,10 @@ def run_climate_scenario_prediction(scenario: str):
         return f"Error parsing JSON: {e}\nRaw result:\n{result}"
 
 # Example usage
-# scenario = "What if half the earth becomes ice??"
-# prediction = run_climate_scenario_prediction(scenario)
-# # generateImage(scenario)
+scenario = "What if all the energy generated on earth is thoruh nuclear power plant?"
+prediction = run_climate_scenario_prediction(scenario)
+analyze_sentence(scenario)
+# generateImage(scenario)
 
 # print("🌍 LLM Climate Impact Prediction:")
 # print(json.dumps(prediction, indent=2) if isinstance(prediction, dict) else prediction)

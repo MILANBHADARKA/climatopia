@@ -145,10 +145,6 @@ export async function POST(request) {
     console.log("Creating post for user:", userId)
     
 
-    let imageUrl = null
-    if (image && image.size > 0) {
-      imageUrl = "/placeholder.svg?height=300&width=600"
-    }
 
     const post = new Post({
       title: title.trim(),
@@ -156,7 +152,7 @@ export async function POST(request) {
       answer: answer.trim(),
       score: score ? Number.parseInt(score) : undefined,
       category,
-      image: imageUrl,
+      image: image || "",
       author: userId,
     })
 

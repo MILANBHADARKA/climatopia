@@ -262,7 +262,7 @@ const EarthSimAI = () => {
             const data = api.data;
             return {
               type: 'prediction',
-              value: data?.data?.prediction
+              value: data?.prediction
             };
           }
           else if (endpoint.key === "geopolitical_impact") {
@@ -273,7 +273,7 @@ const EarthSimAI = () => {
             const data = api.data;
             return {
               type: 'prediction',
-              value: data?.data?.prediction // Assuming the API returns { prediction: "text" }
+              value: data?.prediction // Assuming the API returns { prediction: "text" }
             };
           }
           // Add new sentiment analysis API
@@ -368,8 +368,9 @@ const EarthSimAI = () => {
     const title = prompt.slice(0, 20);
     form.append("title", title);
     form.append("question", prompt);
-    form.append("answer", prompt);
-    form.append("score", score);
+    form.append("answer", explanation);
+    form.append("image", generatedImage);
+    form.append("score", score || 0);
 
     makeAPost(form)
   }
@@ -385,8 +386,9 @@ const EarthSimAI = () => {
     const form = {
       title,
       question: prompt,
-      answer: prompt,
-      score
+      answer: explanation,
+      image: generatedImage,
+      score : score || 0
     }
 
     savingWhatIf(form);
@@ -552,9 +554,9 @@ const EarthSimAI = () => {
                     {explanation && (
                       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
                         <h4 className="font-medium text-blue-800 mb-3">Scenario Analysis</h4>
-                        <p className="text-gray-700">
+                        {/* <p className="text-gray-700"> */}
                           <ReactMarkdown>{explanation}</ReactMarkdown>
-                        </p>
+                        {/* </p> */}
                       </div>
                     )}
 

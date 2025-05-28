@@ -230,7 +230,7 @@ export default function ProfilePage({ params }) {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No posts yet</h3>
               <p className="text-gray-600 mb-6">Share your first "What If" scenario with the community!</p>
-              <Link href="/community/create">
+              <Link href="/WhatIF">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

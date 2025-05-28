@@ -14,10 +14,11 @@ import { useAuth } from '@clerk/nextjs';
 import { useUser } from '@clerk/nextjs';
 import { useEffect } from "react"
 import useCredit from "@/providers/UserCredit"
-
+import MetaMaskGate from "./MetaMaskGate"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [showMetaMaskGate, setShowMetaMaskGate] = useState(false)
   const { isSignedIn, isLoaded } = useAuth();
   const { user } = useUser();
   const pathname = usePathname()
@@ -28,6 +29,7 @@ export default function Navbar() {
     { name: "Features", href: "#features" },
     { name: "Contact", href: "#contact" },
     { name: "Pricing", href: "/pricing" },
+    { name: "WhatIF", href: "/WhatIF" },
     { name: "Community", href: "/community" },
     { name: "Profile", href: "/profile" },
   ]
@@ -56,11 +58,6 @@ export default function Navbar() {
   useEffect(() => {
     if (isSignedIn && user) {
       fetchUserCredits()
-      
-      // Set up periodic refresh every 30 seconds
-      // const intervalId = setInterval(() => {
-      //   fetchUserCredits()
-      // }, 30000)
 
       // Listen for custom credit update events
       const handleCreditUpdate = () => {
@@ -70,7 +67,6 @@ export default function Navbar() {
       window.addEventListener('creditUpdated', handleCreditUpdate)
 
       return () => {
-        // clearInterval(intervalId)
         window.removeEventListener('creditUpdated', handleCreditUpdate)
       }
     }
@@ -104,14 +100,11 @@ export default function Navbar() {
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
             <div className="relative">
-              {/* Replace with your actual logo */}
               <img
                 src="/logo.png"
                 alt="CLIMATOPIA Logo"
                 className="h-40 w-40 object-contain"
               />
-
-              {/* Optional animated icon (e.g., Zap) */}
               <Zap className="h-4 w-4 text-yellow-500 absolute -top-1 -right-1" />
             </div>
           </motion.div>
@@ -138,17 +131,29 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             {isSignedIn ? (
               <div className="flex items-center space-x-3">
-                {/* Credits Display with enhanced animation */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 }}
                   className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-3 py-2 rounded-full border border-blue-200 cursor-pointer"
                   whileHover={{ scale: 1.05 }}
-                  onClick={fetchUserCredits}
-                  title="Click to refresh credits"
+                  onClick={() => setShowMetaMaskGate(true)}
+                  title="Connect MetaMask"
                 >
-                  <motion.div 
+                  <span className="text-sm font-semibold text-gray-700">
+                    MetaMask
+                  </span>
+                </motion.div>
+
+                {/* Credits Display */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-3 py-2 rounded-full border border-blue-200 cursor-pointer"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <motion.div
                     className="w-2 h-2 bg-green-500 rounded-full"
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
@@ -230,13 +235,12 @@ export default function Navbar() {
               <div className="pt-4 space-y-2">
                 {isSignedIn ? (
                   <div className="space-y-3">
-                    {/* Mobile Credits Display with refresh capability */}
-                    <motion.div 
+                    <motion.div
                       className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-3 rounded-xl border border-blue-200 cursor-pointer"
                       whileTap={{ scale: 0.95 }}
-                      onClick={fetchUserCredits}
+                      onClick={() => setShowMetaMaskGate(true)}
                     >
-                      <motion.div 
+                      <motion.div
                         className="w-2 h-2 bg-green-500 rounded-full"
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
@@ -266,6 +270,13 @@ export default function Navbar() {
               </div>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* MetaMask Gate Modal */}
+      <AnimatePresence>
+        {showMetaMaskGate && (
+          <MetaMaskGate onClose={() => setShowMetaMaskGate(false)} />
         )}
       </AnimatePresence>
     </motion.nav>

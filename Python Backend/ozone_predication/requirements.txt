@@ -1,0 +1,6 @@
+xgboost
+pandas
+scikit-learn
+langchain_groq
+dotenv
+fastapi

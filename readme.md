@@ -40,7 +40,6 @@ The project combines cutting-edge AI technologies with real-world datasets from 
   - Rainfall patterns
   - Sea level changes
   - Temperature trends
-  - Crop rate changes
   - Electricity Demand changes
   - Economic impact
   - Humidity changes
@@ -62,12 +61,14 @@ The project combines cutting-edge AI technologies with real-world datasets from 
 - **Knowledge Sharing**: Learn from others' climate curiosity and insights
 
 ### 🏆 Achievement Badge System
-- **Like-based Rewards**: Earn badges based on total likes across posts
-  - 🥉 **Bronze Badge**: 10+ likes
-  - 🥈 **Silver Badge**: 50+ likes
-  - 🥇 **Gold Badge**: 100+ likes
-  - 💎 **Diamond Badge**: 500+ likes
-- **Web3 Integration**: Optional NFT conversion for badges (blockchain-based)
+- **Web3 Integration**: Earn badges as NFTs for achievements
+
+  - **Power User**: Continuous Post on the platform for 10 days
+  - **Community Contributor**: Complete 5 posts in the community
+  - **Climate Modeler**: Ask 5 "What If" questions
+  - **Insightful Modeler**: Achieve total 50 likes on posts of your's account 
+  - **Credit Master**: First time upgrade plan beyond free credit
+  - **Bug Hunter**: Report 5 bugs on github
 
 ## 🔍 Problem Statement
 
@@ -104,9 +105,7 @@ Climatopia addresses these challenges through:
 | **Researcher** | 500 credits | ₹449 | Power users & professionals |
 
 ### 🔄 Payment Options
-- **Fiat Payments**: Stripe integration for INR transactions
-- **Web3 Payments** *(Optional)*: Crypto token payments
-- **Subscription Management**: Automatic renewal and credit top-ups
+- **Payments**: Razorpay integration for INR transactions
 
 ## 🏗️ Architecture
 
@@ -229,18 +228,6 @@ Climatopia/
 - **Database**: MongoDB Atlas
 - **CDN**: Cloudinary
 
-### Deployment
-
-The project is set up for deployment on Vercel (frontend/backend) and Railway (Python APIs).
-
-```bash
-# Deploy frontend and backend
-npm run deploy
-
-# Deploy ML engine
-cd "Python Backend"
-railway up
-```
 
 ## 📦 Python Packages
 
@@ -272,6 +259,51 @@ Full requirements can be found in `Python Backend/requirements.txt`
 
 **Team**: T3Coders  
 **Project**: Climatopia - Hackathon Entry
-<p align="center">© 2025 Climatopia Team. All rights reserved.</p>
 
-<CodeProject id="earthsim_project">
+## 🚀 Getting Started
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-repo/climatopia.git
+   cd climatopia
+   ```
+
+2. **Install dependencies**
+   ```bash
+   # Frontend
+   cd website
+   npm install
+   
+   # Python Backend
+   cd "../Python Backend"
+   pip install -r requirements.txt
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   # Copy example env files
+   cp website/.env.example website/.env
+   cp "Python Backend"/.env.example "Python Backend"/.env
+   ```
+
+4. **Start development servers**
+   ```bash
+   # Frontend (port 3000)
+   cd website
+   npm run dev
+   
+   # Python Backend (port 8000)
+   cd "../Python Backend"
+   python main.py
+   ```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  Built with ❤️ by <strong>Team T3Coders</strong><br>
+  © 2025 Climatopia. All rights reserved.
+</p>

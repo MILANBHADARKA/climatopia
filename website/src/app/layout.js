@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { neobrutalism } from "@clerk/themes";
 import Script from "next/script";
+import { UserCreditContextProvider } from "@/providers/UserCredit";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,10 +40,13 @@ export default function RootLayout({ children }) {
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Navbar />
-          {children}
-          <Footer />
-          <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+          <UserCreditContextProvider>
+
+            <Navbar />
+            {children}
+            <Footer />
+            <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+          </UserCreditContextProvider>
         </body>
       </html>
     </ClerkProvider >

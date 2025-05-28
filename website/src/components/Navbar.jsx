@@ -13,13 +13,15 @@ import {
 import { useAuth } from '@clerk/nextjs';
 import { useUser } from '@clerk/nextjs';
 import { useEffect } from "react"
+import useCredit from "@/providers/UserCredit"
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const { isSignedIn, isLoaded } = useAuth();
   const { user } = useUser();
   const pathname = usePathname()
-  const [userCredits, setUserCredits] = useState(0)
+  const { userCredits, setUserCredits } = useCredit()
 
   const allNavItems = [
     { name: "Home", href: "/" },

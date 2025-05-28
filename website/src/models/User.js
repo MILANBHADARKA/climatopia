@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
   firstName: { type: String },
   lastName: { type: String },
   profileImage: { type: String },
-  credits: { type: Number, default: 50 }
+  credits: { type: Number, default: 50 },
+  metamaskAddress: {type: String}
 }, { timestamps: true });
 
 export default mongoose.models.User || mongoose.model('User', userSchema);

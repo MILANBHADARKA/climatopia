@@ -194,77 +194,77 @@ const EarthSimAI = () => {
       const apiPromises = apiEndpoints.map(async (endpoint) => {
         try {
           if (endpoint.key === "predict_economic_impact") {
-            const api = await axios.post("/api/whatif/postmethods", {
+            const apiRes = await axios.post("/api/whatif/postmethods", {
               scenario: prompt,
-              api: `${link}/predict_economic_impact`,
+              api: `${endpoint.url}/predict_economic_impact`,
             });
             // console.log(api.data)
-
+            const value = apiRes?.data?.data?.predicted_economic_impact_million_usd
             return {
               type: "prediction",
-              value: api?.data?.data?.predicted_economic_impact_million_usd,
+              value: value,
             };
           } else if (endpoint.key === "predict_electricity") {
             const today = new Date();
             const formattedDate = today.toISOString().split("T")[0];
-            const api = await axios.post(`/api/whatif/postmethods`, {
+            const apiRes = await axios.post(`/api/whatif/postmethods`, {
               start_time: formattedDate.toString(),
-              api: `${link}/predict_electricity`,
+              api: `${endpoint.url}/predict_electricity`,
             });
             // console.log(api.data.data)
             return {
               type: "graph",
-              value: JSON.parse(api?.data?.data),
+              value: JSON.parse(apiRes?.data?.data),
             };
           } else if (endpoint.key === "predict_adaptation") {
             const api = await axios.post(`/api/whatif/postmethods`, {
               scenario: prompt,
-              api: `${link}/predict_adaptation`,
+              api: `${endpoint.url}/predict_adaptation`,
             });
-            // console.log(api.data.data)
+            const val = api?.data?.data?.predicted_adaptation_strategy
+            console.log(val)
             return {
               type: "prediction",
-              value: api?.data?.data?.predicted_adaptation_strategy,
+              value: val,
             };
           } else if (endpoint.key === "temperature_prediction") {
-            // const urlprompt = encodeURIComponent(prompt);
+            const urlprompt = encodeURIComponent(prompt);
             const api = await axios.post(`/api/whatif/postmethods`, {
               scenario: prompt,
-              api: `${link}/temperature_prediction`,
+              api: `${endpoint.url}/temperature_prediction/`,
             });
             const data = api.data;
             console.log(data.data);
+            const val = data?.data?.prediction?.Temperature
             return {
               type: "prediction",
-              value: data?.data?.prediction?.Temperature,
+              value: val,
             };
           } else if (endpoint.key === "humidity_prediction") {
-            console.log(prompt);
-
             const api = await axios.post("/api/whatif/postmethods", {
-              api: `${link}/humidity_prediction/`,
+              api: `${endpoint.url}/humidity_prediction/`,
               scenario: prompt,
             });
-            await sleep(10000);
             // console.log(api)
-            const data = await api.data;
+            const data = api.data;
+            const val = data?.data?.prediction.predicted_humidity
             // console.log(data)
             return {
               type: "prediction",
-              value: data?.data?.prediction.predicted_humidity,
+              value: val,
             };
           } else if (endpoint.key === "temperature-graph") {
-            const api = await axios.post(`/api/whatif/getmethods`, {
-              api: `${link}/temperature-graph`,
+            const apiRes = await axios.post(`/api/whatif/getmethods`, {
+              api: `${endpoint.url}/temperature-graph`,
             });
-            console.log(api.data);
+            const value = apiRes?.data?.data?.prediction?.plotly
             return {
               type: "graph",
-              value: JSON.parse(api?.data?.data?.prediction?.plotly),
+              value: JSON.parse(value),
             };
           } else if (endpoint.key === "ozone_prediction") {
             const api = await axios.post(`/api/whatif/postmethods`, {
-              api: `${link}/ozone_prediction`,
+              api: `${endpoint.url}/ozone_prediction/`,
               scenario: prompt
             })
             const data = api.data;
@@ -273,53 +273,44 @@ const EarthSimAI = () => {
               value: Math.random()*6 ,
             };
           } else if (endpoint.key === "geopolitial_impact") {
-            const api = await axios.post(`/api/whatif/postmethods`, {
-              api: `${link}/geopolitial_impact`,
+            //ok this has to be the worst possible problem in fastapi
+            // this works => ${endpoint.url}/geopolitial_impact/
+            // this doesn't work => ${endpoint.url}/geopolitial_impact
+            //never using this again!!
+            const apiRes = await axios.post(`/api/whatif/postmethods`, {
+              api: `${endpoint.url}/geopolitial_impact/`,
               scenario: prompt,
             });
-            const data = api.data;
+            const data = apiRes.data;
+            const val = data?.data?.prediction
             return {
               type: "prediction",
-              value: data?.data?.prediction,
+              value: val,
             };
           }
-          // else if (endpoint.key === "geopolitical_impact") {
-          //   const api = await axios.post("/api/whatif/postmethods", {
-          //     api : `/geopolitial_impact`,
-          //     scenario : prompt
-          //   });
-          //   const data = api.data;
-          //   return {
-          //     type: 'prediction',
-          //     value: data?.prediction // Assuming the API returns { prediction: "text" }
-          //   };
-          // }
           // Add new sentiment analysis API
           else if (endpoint.key === "analyze_sentimental_report") {
             console.log(prompt);
             const api = await axios.post("/api/whatif/postmethods", {
-              api: `${link}/analyze_sentimental_report`,
+              api: `${endpoint.url}/analyze_sentimental_report`,
               text: prompt,
             });
             const data = api.data;
-            console.log(data);
-            console.log(data.data);
+            const val = data?.data
             return {
               type: "prediction",
-              value: data?.data,
+              value: val,
             };
           }
           else if(endpoint.key === "predict_croprate"){
             const api = await axios.post(`/api/whatif/postmethods`, {
               scenario: prompt,
-              api: `${link}/predict_croprate`,
+              api: `${endpoint.url}/predict_croprate`,
             });
-            // console.log(api.data.data)
-             const data = api.data;
-            console.log(data.data);
+             const value = api.data?.data?.result?.llm_predicted_crop_yield;
             return {
               type: "prediction",
-              value: api?.data?.data?.result?.llm_predicted_crop_yield,
+              value: value
             };
           }
           // return await callApiWithRetry(apiCall);
@@ -351,11 +342,10 @@ const EarthSimAI = () => {
       });
 
       setResults(resultsMap);
-
       // Generate explanation
       try {
         const api = await axios.post("/api/whatif/postmethods", {
-          api: `${link}/explain_whatif/`,
+          api: `https://explain-agent-climatopia.up.railway.app/explain_whatif/`,
           scenario: prompt,
         });
         const data = api.data;
@@ -364,6 +354,7 @@ const EarthSimAI = () => {
         console.error("Error generating explanation:", error);
       }
 
+      // TODO: Uncomment this when gemini api changes!!
       // Generate image
       try {
         const imageRes = await axios.post("/api/image_generate", {
@@ -374,7 +365,7 @@ const EarthSimAI = () => {
         console.error("Error generating image:", error);
       }
 
-      // Deduct credits only if all APIs succeeded
+      // // Deduct credits only if all APIs succeeded
       try {
         await axios.post("/api/user/credits", {
           amount: 10,
@@ -642,13 +633,13 @@ const EarthSimAI = () => {
                               }
                               setIsLoading(true);
                               try {
-                                const imageRes = await axios.post(
-                                  "/api/image_generate",
-                                  {
-                                    prompt,
-                                  }
-                                );
-                                setGeneratedImage(imageRes.data.imageUrl);
+                                // const imageRes = await axios.post(
+                                //   "/api/image_generate",
+                                //   {
+                                //     prompt,
+                                //   }
+                                // );
+                                // setGeneratedImage(imageRes.data.imageUrl);
 
                                 // Deduct credits
                                 await axios.post("/api/user/credits", {

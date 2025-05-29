@@ -9,6 +9,8 @@ import Script from "next/script";
 import { UserCreditContextProvider } from "@/providers/UserCredit";
 import { MetaMaskProvider } from "@/components/MetaMaskProvider";
 import MetaMaskGate from "@/components/MetaMaskGate";
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +40,8 @@ export default function RootLayout({ children }) {
       signInUrl="/sign-in"
       signUpUrl="/sign-up"
     >
+      <Analytics />
+      <SpeedInsights />
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <UserCreditContextProvider>

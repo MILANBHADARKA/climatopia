@@ -109,7 +109,7 @@ export default function Hero() {
                 className="border-2 border-gray-300 hover:border-blue-500 text-gray-700 hover:text-blue-600 px-8 py-4 text-lg font-semibold bg-white/80 backdrop-blur-sm"
               >
                 <Play className="mr-2 h-5 w-5" />
-                Watch Demo
+                <a target="_blank" href="https://www.youtube.com/watch?v=6dmSHi4uTVQ">Watch Demo</a>
               </Button>
             </motion.div>
           </motion.div>

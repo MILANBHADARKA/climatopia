@@ -27,7 +27,7 @@ import { ClimateSummaryCard } from "@/components/whatif/ClimateCard";
 import IsSignedIn from "@/components/HOC/IsSignedIn";
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 const EarthSimAI = () => {
   const [prompt, setPrompt] = useState("");
@@ -139,7 +139,7 @@ const EarthSimAI = () => {
       url: "https://diligent-cooperation-production.up.railway.app",
       icon: Globe,
       color: "from-green-400 to-emerald-600",
-      key: "geopolitical_impact",
+      key: "geopolitial_impact",
       unit: "",
       category: "political",
     },
@@ -181,24 +181,18 @@ const EarthSimAI = () => {
             throw error;
           }
           // Wait before retrying (with exponential backoff)
-          await new Promise(resolve => setTimeout(resolve, delay * retries));
+          await new Promise((resolve) => setTimeout(resolve, delay * retries));
         }
       }
     };
-
-
 
     try {
       // First generate a random score
 
       // Call all prediction APIs
-      const link = process.env.NEXT_PUBLIC_NGROK_URI
+      const link = process.env.NEXT_PUBLIC_NGROK_URI;
       const apiPromises = apiEndpoints.map(async (endpoint) => {
         try {
-
-
-
-
           if (endpoint.key === "predict_economic_impact") {
             const api = await axios.post("/api/whatif/postmethods", {
               scenario: prompt,
@@ -210,9 +204,7 @@ const EarthSimAI = () => {
               type: "prediction",
               value: api?.data?.data?.predicted_economic_impact_million_usd,
             };
-          }
-
-          else if (endpoint.key === "predict_electricity") {
+          } else if (endpoint.key === "predict_electricity") {
             const today = new Date();
             const formattedDate = today.toISOString().split("T")[0];
             const api = await axios.post(`/api/whatif/postmethods`, {
@@ -239,9 +231,9 @@ const EarthSimAI = () => {
             const api = await axios.post(`/api/whatif/postmethods`, {
               scenario: prompt,
               api: `${link}/temperature_prediction`,
-            })
+            });
             const data = api.data;
-            console.log(data.data)
+            console.log(data.data);
             return {
               type: "prediction",
               value: data?.data?.prediction?.Temperature,
@@ -263,9 +255,9 @@ const EarthSimAI = () => {
             };
           } else if (endpoint.key === "temperature-graph") {
             const api = await axios.post(`/api/whatif/getmethods`, {
-              api: `${link}/temperature-graph`
+              api: `${link}/temperature-graph`,
             });
-            console.log(api.data)
+            console.log(api.data);
             return {
               type: "graph",
               value: JSON.parse(api?.data?.data?.prediction?.plotly),
@@ -275,23 +267,20 @@ const EarthSimAI = () => {
               api: `${link}/ozone_prediction`,
               scenario: prompt
             })
-            console.log("Ozon Data!!!!!!!!!!!!!!!!!! : ", api.data)
             const data = api.data;
             return {
               type: "prediction",
               value: data?.data?.prediction,
             };
-          } else if (endpoint.key === "geopolitical_impact") {
+          } else if (endpoint.key === "geopolitial_impact") {
             const api = await axios.post(`/api/whatif/postmethods`, {
-              api: `${link}/geopolitical_impact`,
-              scenario: prompt
-            })
-
+              api: `${link}/geopolitial_impact`,
+              scenario: prompt,
+            });
             const data = api.data;
-
             return {
-              type: 'prediction',
-              value: data?.data?.prediction
+              type: "prediction",
+              value: data?.data?.prediction,
             };
           }
           // else if (endpoint.key === "geopolitical_impact") {
@@ -314,10 +303,23 @@ const EarthSimAI = () => {
             });
             const data = api.data;
             console.log(data);
-            console.log(data.data)
+            console.log(data.data);
             return {
               type: "prediction",
               value: data?.data,
+            };
+          }
+          else if(endpoint.key === "predict_croprate"){
+            const api = await axios.post(`/api/whatif/postmethods`, {
+              scenario: prompt,
+              api: `${link}/predict_croprate`,
+            });
+            // console.log(api.data.data)
+             const data = api.data;
+            console.log(data.data);
+            return {
+              type: "prediction",
+              value: api?.data?.data?.result?.llm_predicted_crop_yield,
             };
           }
           // return await callApiWithRetry(apiCall);
@@ -419,8 +421,8 @@ const EarthSimAI = () => {
       question: prompt,
       answer: explanation,
       image: generatedImage,
-      score: score || 0
-    }
+      score: score || 0,
+    };
 
     savingWhatIf(form);
   };
@@ -555,23 +557,28 @@ const EarthSimAI = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600">Sentiment:</span>
                       <span
-                        className={`font-medium ${results["analyze_sentimental_report"]?.value?.sentiment ===
-                            "POSITIVE"
+                        className={`font-medium ${
+                          results["analyze_sentimental_report"]?.value
+                            ?.sentiment === "POSITIVE"
                             ? "text-green-600"
                             : results["sentiment_analysis"]?.value
-                              ?.sentiment === "NEGATIVE"
-                              ? "text-red-600"
-                              : "text-yellow-600"
-                          }`}
+                                ?.sentiment === "NEGATIVE"
+                            ? "text-red-600"
+                            : "text-yellow-600"
+                        }`}
                       >
-                        {results["analyze_sentimental_report"]?.value?.sentiment}
+                        {
+                          results["analyze_sentimental_report"]?.value
+                            ?.sentiment
+                        }
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600">Score:</span>
                       <span className="font-medium text-gray-800">
                         {Math.round(
-                          results["analyze_sentimental_report"]?.value?.score * 100
+                          results["analyze_sentimental_report"]?.value?.score *
+                            100
                         )}
                         %
                       </span>
@@ -598,7 +605,9 @@ const EarthSimAI = () => {
                   <div className="flex flex-col h-full gap-6">
                     {explanation && (
                       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
-                        <h4 className="font-medium text-blue-800 mb-3">Scenario Analysis</h4>
+                        <h4 className="font-medium text-blue-800 mb-3">
+                          Scenario Analysis
+                        </h4>
                         {/* <p className="text-gray-700"> */}
                         <ReactMarkdown>{explanation}</ReactMarkdown>
                         {/* </p> */}
@@ -729,7 +738,7 @@ const EarthSimAI = () => {
                 )}
               </div>
               {/* Geopolitical Impact Card */}
-              {results["geopolitical_impact"] && (
+              {results["geopolitial_impact"] && (
                 <div className="col-span-1">
                   <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 h-full">
                     <div className="flex items-center mb-4">
@@ -740,7 +749,7 @@ const EarthSimAI = () => {
                     </div>
                     <div className="prose prose-sm max-w-none text-gray-700">
                       <ReactMarkdown>
-                        {results["geopolitical_impact"].value}
+                        {results["geopolitial_impact"].value}
                       </ReactMarkdown>
                     </div>
                   </div>

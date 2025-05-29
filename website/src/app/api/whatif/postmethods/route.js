@@ -13,7 +13,7 @@ export async function POST(req) {
       obj = {text}
     }
     // console.log(obj)
-
+    // console.log("Call for " + api)
     const apicall = await fetch(`${api}`, {
       method: 'POST',
       headers: {
@@ -22,7 +22,6 @@ export async function POST(req) {
       },
       body: JSON.stringify(obj)
     });
-
     const data = await apicall.json();
     return Response.json({data});
   } catch (error) {

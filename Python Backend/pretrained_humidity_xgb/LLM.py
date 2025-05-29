@@ -19,45 +19,44 @@ llm = ChatGroq(
 
 # Define prompt template
 prompt_template = PromptTemplate.from_template("""
-You are an expert in climate science and sustainable agriculture. Given a hypothetical scenario, your task is to estimate the effects on various environmental, agricultural, and economic indicators in India.
+You are an expert in climate science and sustainable agriculture.
 
-Scenario: {scenario}
+Your task is to analyze the following hypothetical scenario and estimate its impact on key environmental, agricultural, and economic indicators in **India**.
 
+---
+### Scenario:
+"{scenario}"
+---
 
+### Instructions:
+- Return ONLY a **valid JSON object** with numeric values for each field.
+- Do **not** include any explanation, markdown formatting (no ```), or text outside the JSON.
+- All values must be strictly **positive floats**, **except** for `meantemp`, which can be negative.
+- Ensure:
+  - `humidity` is between **60-100**
+  - `wind_speed` is between **0-8**
+  - `meanpressure` is between **1005-1020**
+  - `Soil_Health_Index` is between **0-100**
 
-Estimate the impact on the following indicators:
-- meantemp (°C)
-- humidity (%)
-- wind_speed (km/h)
-- meanpressure (hPa)
-- Economic_Impact_Million_USD
-- Total_Precipitation_mm
-- CO2_Emissions_MT
-- Crop_Yield_MT_per_HA
-- Pesticide_Use_KG_per_HA
-- Fertilizer_Use_KG_per_HA
-- Soil_Health_Index (0-100)
--solar power generated (MWH)
-
-only "meantemp" can be negative. every other thing should be positive.
-
-Output format:
-```json
+---
+### Output Format Example:
 {{
-  "meantemp": float,
-  "humidity": float, (between 60-100)
-  "wind_speed": float, (between 0-8)
-  "meanpressure": float, (between 1005-1020)
-  "Economic_Impact_Million_USD": float,
-  "Total_Precipitation_mm": float,
-  "CO2_Emissions_MT": float,
-  "Crop_Yield_MT_per_HA": float,
-  "Pesticide_Use_KG_per_HA": float,
-  "Fertilizer_Use_KG_per_HA": float,
-  "Soil_Health_Index": float
-  "solar power generated": float
+  "meantemp": -1.5,
+  "humidity": 82.3,
+  "wind_speed": 4.1,
+  "meanpressure": 1012.7,
+  "Economic_Impact_Million_USD": 145.0,
+  "Total_Precipitation_mm": 210.3,
+  "CO2_Emissions_MT": 3.4,
+  "Crop_Yield_MT_per_HA": 2.5,
+  "Pesticide_Use_KG_per_HA": 1.8,
+  "Fertilizer_Use_KG_per_HA": 4.7,
+  "Soil_Health_Index": 76.2,
+  "solar_generation": 1250.4,
+  "Temperature": 34.8
 }}
-Only return valid JSON. No explanation.
+---
+Respond only with a JSON object exactly like the format above.
 """)
 
 # Function to run the climate impact estimator

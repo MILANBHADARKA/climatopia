@@ -1,7 +1,11 @@
-import {connectToDB} from "@/lib/mongodb"
-import Post from "@/models/Post"
-import { getMockPosts } from "@/lib/mockData"
-import { getUser } from "@/lib/getUser"
+import { connectToDB } from "@/lib/mongodb";
+import Post from "@/models/Post";
+import { getMockPosts } from "@/lib/mockData";
+import { getUser } from "@/lib/getUser";
+import {
+  mintBadgeToUser,
+  checkUserHasBadge,
+} from "../../api/badge/badgeservice";
 
 export async function GET(request) {
   try {
@@ -30,19 +34,19 @@ export async function GET(request) {
     // }
 
     // Production code with MongoDB
-    await connectToDB()
+    await connectToDB();
 
-    const { searchParams } = new URL(request.url)
-    const filter = searchParams.get("filter") || "latest"
-    const category = searchParams.get("category") || "all"
-    const search = searchParams.get("search") || ""
-    const page = Number.parseInt(searchParams.get("page")) || 1
-    const limit = Number.parseInt(searchParams.get("limit")) || 10
+    const { searchParams } = new URL(request.url);
+    const filter = searchParams.get("filter") || "latest";
+    const category = searchParams.get("category") || "all";
+    const search = searchParams.get("search") || "";
+    const page = Number.parseInt(searchParams.get("page")) || 1;
+    const limit = Number.parseInt(searchParams.get("limit")) || 10;
 
-    const query = { isPublic: true }
+    const query = { isPublic: true };
 
     if (category !== "all") {
-      query.category = category
+      query.category = category;
     }
 
     if (search) {
@@ -50,19 +54,19 @@ export async function GET(request) {
         { title: { $regex: search, $options: "i" } },
         { question: { $regex: search, $options: "i" } },
         { answer: { $regex: search, $options: "i" } },
-      ]
+      ];
     }
 
-    let sortOptions = {}
+    let sortOptions = {};
     switch (filter) {
       case "popular":
-        sortOptions = { likesCount: -1, createdAt: -1 }
-        break
+        sortOptions = { likesCount: -1, createdAt: -1 };
+        break;
       case "trending":
-        sortOptions = { createdAt: -1 } // Simplified for now
-        break
+        sortOptions = { createdAt: -1 }; // Simplified for now
+        break;
       default:
-        sortOptions = { createdAt: -1 }
+        sortOptions = { createdAt: -1 };
     }
 
     const posts = await Post.find(query)
@@ -70,9 +74,9 @@ export async function GET(request) {
       .sort(sortOptions)
       .skip((page - 1) * limit)
       .limit(limit)
-      .lean()
+      .lean();
 
-    const totalPosts = await Post.countDocuments(query)
+    const totalPosts = await Post.countDocuments(query);
 
     return Response.json({
       posts,
@@ -82,25 +86,28 @@ export async function GET(request) {
         total: totalPosts,
         pages: Math.ceil(totalPosts / limit),
       },
-    })
+    });
   } catch (error) {
-    console.error("Error fetching posts:", error)
-    return Response.json({ error: "Failed to fetch posts" }, { status: 500 })
+    console.error("Error fetching posts:", error);
+    return Response.json({ error: "Failed to fetch posts" }, { status: 500 });
   }
 }
 
 export async function POST(request) {
   try {
-    const formData = await request.formData()
-    const title = formData.get("title")
-    const question = formData.get("question")
-    const answer = formData.get("answer")
-    const score = formData.get("score")
-    const category = formData.get("category")
-    const image = formData.get("image")
+    const formData = await request.formData();
+    const title = formData.get("title");
+    const question = formData.get("question");
+    const answer = formData.get("answer");
+    const score = formData.get("score");
+    const category = formData.get("category");
+    const image = formData.get("image");
 
     if (!title || !question || !answer) {
-      return Response.json({ error: "Title, question, and answer are required" }, { status: 400 })
+      return Response.json(
+        { error: "Title, question, and answer are required" },
+        { status: 400 }
+      );
     }
 
     // For development, return mock success
@@ -130,21 +137,21 @@ export async function POST(request) {
     // }
 
     // Production code with MongoDB
-    await connectToDB()
+    await connectToDB();
 
     const user = await getUser(request);
-
     const userId = user ? user._id : null;
 
     if (!userId) {
-      console.error("User not authenticated")
-      
-      return Response.json({ error: "User not authenticated" }, { status: 401 })
+      console.error("User not authenticated");
+
+      return Response.json(
+        { error: "User not authenticated" },
+        { status: 401 }
+      );
     }
 
-    console.log("Creating post for user:", userId)
-    
-
+    console.log("Creating post for user:", userId);
 
     const post = new Post({
       title: title.trim(),
@@ -154,14 +161,40 @@ export async function POST(request) {
       category,
       image: image || "",
       author: userId,
-    })
+    });
 
-    await post.save()
-    await post.populate("author", "firstName lastName email")
+    await post.save();
+    console.log(user.metamaskAddress);
+    const userPosts = await Post.find({ author: userId });
+    const existingPosts = userPosts.length;
+    if (user.metamaskAddress) {
+      //logic to mint badge if this is the first post "First Sim Run"
+      if (existingPosts === 1) {
+        console.log("create a badge");
+        const walletAddress = user.metamaskAddress;
+        const alreadyHas = await checkUserHasBadge(
+          walletAddress,
+          "First Sim Run"
+        );
+        if (!alreadyHas) {
+          try {
+            await mintBadgeToUser(walletAddress, "First Sim Run");
+            console.log("🏅 First Sim Run badge minted for", walletAddress);
+          } catch (mintError) {
+            console.error("Failed to mint First Sim Run badge:", mintError);
+          }
+        } else {
+          console.log("User already has this badge");
+        }
+      }
+    } else {
+      console.log("User doesn't have metamask linked");
+    }
+    await post.populate("author", "firstName lastName email");
 
-    return Response.json({ post }, { status: 201 })
+    return Response.json({ post }, { status: 201 });
   } catch (error) {
-    console.error("Error creating post:", error)
-    return Response.json({ error: "Failed to create post" }, { status: 500 })
+    console.error("Error creating post:", error);
+    return Response.json({ error: "Failed to create post" }, { status: 500 });
   }
 }

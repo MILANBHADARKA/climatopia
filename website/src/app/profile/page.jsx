@@ -24,11 +24,31 @@ export default function ProfilePage() {
     totalLikes: 0,
     totalComments: 0,
   });
+  const [bages, setbages] = useState([])
+  const [bageImages, setBageImages] = useState([]);
   useEffect(() => {
     const fetchAll = async () => {
       await fetchUserPosts();
       await fetchUserStats();
-      await fetchUserBadges();
+      const userbages = await fetchUserBadges();
+      setbages(userbages);
+
+      // Fetch badge images
+      const fetchedImages = [];
+      for (const badge of userbages || []) {
+        try {
+          const response = await axios.get(badge.url, { maxRedirects: 5 });
+          if (response.data?.image) {
+            fetchedImages.push({
+              name: badge.name,
+              image: response.data.image
+            });
+          }
+        } catch (error) {
+          console.error(`Error fetching badge from ${badge.url}:`, error.message);
+        }
+      }
+      setBageImages(fetchedImages); F
     };
 
     fetchAll();
@@ -186,6 +206,34 @@ export default function ProfilePage() {
               </h3>
               <p className="text-gray-600">Comments Received</p>
             </div>
+          </motion.div>
+
+          <motion.div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Badges</h2>
+            {bageImages.length > 0 ? (
+              <div className="flex flex-wrap gap-4">
+                {bageImages.map((badge, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <div className="w-16 h-16 relative">
+                      <Image
+                        src={badge.image}
+                        alt={badge.name || "Badge"}
+                        fill
+                        className="object-contain"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                    {badge.name && (
+                      <span className="text-sm text-gray-600 mt-1">{badge.name}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500">No badges earned yet</p>
+            )}
           </motion.div>
 
           {/* Posts Section */}

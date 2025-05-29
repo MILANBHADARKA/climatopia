@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { User, Heart, MessageCircle, Calendar, TrendingUp, Edit, Trash2 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import axios from "axios"
 
 export default function ProfilePage({ params }) {
 
@@ -18,20 +19,46 @@ export default function ProfilePage({ params }) {
     totalLikes: 0,
     totalComments: 0,
   })
+  const [bages, setbages] = useState([])
+  const [bageImages, setBageImages] = useState([]);
 
 
 
   useEffect(() => {
     async function fetchData() {
-      const { id } = await params
-      if (!id) return
+      const { id } = await params;
+      if (!id) return;
 
-      setLoading(true)
-      await fetchUserPosts(id)
-      await fetchUserStats(id)
+      setLoading(true);
+      await fetchUserPosts(id);
+      await fetchUserStats(id);
+      const userbages = await fetchUserBages(id);
+      setbages(userbages);
+
+      // Fetch badge images
+      const fetchedImages = [];
+      for (const badge of userbages || []) {
+        try {
+          const response = await axios.get(badge.url, { maxRedirects: 5 });
+          if (response.data?.image) {
+            fetchedImages.push({
+              name: badge.name,
+              image: response.data.image
+            });
+          }
+        } catch (error) {
+          console.error(`Error fetching badge from ${badge.url}:`, error.message);
+        }
+      }
+      setBageImages(fetchedImages);
     }
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
+
+  async function fetchUserBages(id) {
+    const api = await axios.get(`/api/badge/user?id=${id}`);
+    return api.data?.badges
+  }
 
   const fetchUserPosts = async (id) => {
     console.log("Fetching user posts for ID:", id)
@@ -144,6 +171,36 @@ export default function ProfilePage({ params }) {
             <h3 className="text-2xl font-bold text-gray-900">{stats.totalComments}</h3>
             <p className="text-gray-600">Comments Received</p>
           </div>
+
+
+        </motion.div>
+
+        <motion.div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Badges</h2>
+          {bageImages.length > 0 ? (
+            <div className="flex flex-wrap gap-4">
+              {bageImages.map((badge, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <div className="w-16 h-16 relative">
+                    <Image
+                      src={badge.image}
+                      alt={badge.name || "Badge"}
+                      fill
+                      className="object-contain"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  {badge.name && (
+                    <span className="text-sm text-gray-600 mt-1">{badge.name}</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No badges earned yet</p>
+          )}
         </motion.div>
 
         {/* Posts Section */}

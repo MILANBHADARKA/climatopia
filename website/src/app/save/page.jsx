@@ -256,7 +256,7 @@ export default function SavedPage() {
               {savedWhatIfs.length > 0 ? (
                 savedWhatIfs.map((whatif, index) => (
                   <motion.div
-                    key={whatif._id}
+                    key={whatif?._id}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: index * 0.1 }}
@@ -265,14 +265,14 @@ export default function SavedPage() {
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-xl font-bold text-gray-900">{whatif.title}</h3>
+                          <h3 className="text-xl font-bold text-gray-900">{whatif?.title}</h3>
                           {whatif.isPosted && (
                             <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
                               Posted
                             </span>
                           )}
                           <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm capitalize">
-                            {whatif.category}
+                            {whatif?.category}
                           </span>
                         </div>
                         <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
@@ -294,7 +294,7 @@ export default function SavedPage() {
                           <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => handlePostToCommunity(whatif._id)}
+                            onClick={() => handlePostToCommunity(whatif?._id)}
                             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium"
                           >
                             <Send size={16} />
@@ -307,7 +307,7 @@ export default function SavedPage() {
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          onClick={() => handleDeleteWhatIf(whatif._id)}
+                          onClick={() => handleDeleteWhatIf(whatif?._id)}
                           className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                         >
                           <Trash2 size={18} />
@@ -318,12 +318,12 @@ export default function SavedPage() {
                     <div className="space-y-4">
                       <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
                         <h4 className="font-semibold text-blue-900 mb-2">What If:</h4>
-                        <p className="text-blue-800">{whatif.question}</p>
+                        <p className="text-blue-800">{whatif?.question}</p>
                       </div>
 
                       <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
                         <h4 className="font-semibold text-green-900 mb-2">Analysis:</h4>
-                        <p className="text-green-800 line-clamp-3">{whatif.answer}</p>
+                        <p className="text-green-800 line-clamp-3">{whatif?.answer}</p>
                       </div>
                     </div>
 
@@ -368,7 +368,7 @@ export default function SavedPage() {
               {savedPosts.length > 0 ? (
                 savedPosts.map((savedPost, index) => (
                   <motion.div
-                    key={savedPost._id}
+                    key={savedPost?._id}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: index * 0.1 }}
@@ -376,24 +376,24 @@ export default function SavedPage() {
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
-                        <Link href={`/community/post/${savedPost.post._id}`}>
+                        <Link href={`/community/post/${savedPost.post?._id}`}>
                           <h3 className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">
-                            {savedPost.post.title}
+                            {savedPost.post?.title}
                           </h3>
                         </Link>
                         <div className="flex items-center gap-3 mt-2">
                           <div className="flex items-center gap-2">
                             <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                              {savedPost.post.author?.name?.charAt(0) || "U"}
+                              {savedPost.post?.author?.name?.charAt(0) || "U"}
                             </div>
-                            <span className="text-sm text-gray-600">{savedPost.post.author?.name}</span>
+                            <span className="text-sm text-gray-600">{savedPost.post?.author?.name}</span>
                           </div>
                           <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs capitalize">
-                            {savedPost.post.category}
+                            {savedPost.post?.category}
                           </span>
                           <div className="flex items-center gap-1 text-sm text-gray-500">
                             <Clock size={14} />
-                            Saved {new Date(savedPost.createdAt).toLocaleDateString()}
+                            Saved {new Date(savedPost?.createdAt).toLocaleDateString()}
                           </div>
                         </div>
                       </div>
@@ -401,7 +401,7 @@ export default function SavedPage() {
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        onClick={() => handleRemoveSavedPost(savedPost._id)}
+                        onClick={() => handleRemoveSavedPost(savedPost?._id)}
                         className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                       >
                         <Trash2 size={18} />
@@ -410,28 +410,28 @@ export default function SavedPage() {
 
                     <div className="space-y-3 mb-4">
                       <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r-lg">
-                        <p className="text-blue-800 text-sm line-clamp-2">{savedPost.post.question}</p>
+                        <p className="text-blue-800 text-sm line-clamp-2">{savedPost.post?.question}</p>
                       </div>
                       <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded-r-lg">
-                        <p className="text-green-800 text-sm line-clamp-2">{savedPost.post.answer}</p>
+                        <p className="text-green-800 text-sm line-clamp-2">{savedPost.post?.answer}</p>
                       </div>
                     </div>
 
                     {savedPost.notes && (
                       <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
                         <h4 className="font-semibold text-yellow-900 mb-1">Your Notes:</h4>
-                        <p className="text-yellow-800 text-sm">{savedPost.notes}</p>
+                        <p className="text-yellow-800 text-sm">{savedPost?.notes}</p>
                       </div>
                     )}
 
                     <div className="flex items-center gap-6 text-sm text-gray-600">
                       <div className="flex items-center gap-1">
                         <TrendingUp size={16} />
-                        <span>Score: {savedPost.post.score || 0}</span>
+                        <span>Score: {savedPost.post?.score || 0}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <MessageSquare size={16} />
-                        <span>{savedPost.post.commentsCount || 0} comments</span>
+                        <span>{savedPost.post?.commentsCount || 0} comments</span>
                       </div>
                     </div>
                   </motion.div>

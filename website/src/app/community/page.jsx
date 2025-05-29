@@ -336,11 +336,11 @@ export default function CommunityPage() {
             <AnimatePresence>
               {posts.map((post, index) => (
                 <PostCard
-                  key={post._id}
+                  key={post?._id}
                   post={post}
                   onLike={handleLike}
                   onSave={handleSave}
-                  isSaved={savedPosts.some(savedPost => savedPost.post._id == post._id)}
+                  isSaved={savedPosts.some(savedPost => savedPost.post?._id == post?._id)}
                   saveLoading={saveLoading}
                 />
               ))}

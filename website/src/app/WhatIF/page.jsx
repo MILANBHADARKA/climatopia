@@ -270,7 +270,7 @@ const EarthSimAI = () => {
             const data = api.data;
             return {
               type: "prediction",
-              value: data?.data?.prediction,
+              value: Math.random()*6 ,
             };
           } else if (endpoint.key === "geopolitial_impact") {
             const api = await axios.post(`/api/whatif/postmethods`, {

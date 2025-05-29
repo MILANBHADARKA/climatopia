@@ -4,7 +4,7 @@ import { Search, MapPin, Thermometer, Droplets, Wind, Eye, Gauge, Sun, Cloud, Cl
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 const API_KEY = process.env.NEXT_PUBLIC_WEATHER_KEY
-const BASE_URL = 'http://api.weatherapi.com/v1';
+const BASE_URL = 'https://api.weatherapi.com/v1';
 
 const WeatherApp = () => {
   const [currentWeather, setCurrentWeather] = useState(null);

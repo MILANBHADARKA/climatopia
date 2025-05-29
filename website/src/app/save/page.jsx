@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import Toast from "@/components/Toast"
+import IsSignedIn from "@/components/HOC/IsSignedIn"
 
 export default function SavedPage() {
   const [activeTab, setActiveTab] = useState("whatifs")
@@ -153,6 +154,7 @@ export default function SavedPage() {
   }
 
   return (
+    <IsSignedIn>
     <div className="mt-16 min-h-screen bg-gray-50">
       {/* Header */}
       <motion.div
@@ -464,5 +466,6 @@ export default function SavedPage() {
         onClose={() => setToast({ ...toast, show: false })}
       />
     </div>
+    </IsSignedIn>
   )
 }

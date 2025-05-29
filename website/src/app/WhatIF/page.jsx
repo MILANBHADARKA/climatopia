@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { PredictionCard } from "@/components/whatif/Prediction";
 import { EnergyGraphCard } from "@/components/whatif/EnergyGraph";
 import { ClimateSummaryCard } from "@/components/whatif/ClimateCard";
+import IsSignedIn from "@/components/HOC/IsSignedIn";
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -264,8 +265,8 @@ const EarthSimAI = () => {
           } else if (endpoint.key === "ozone_prediction") {
             const api = await axios.post(`/api/whatif/postmethods`, {
               api: `${link}/ozone_prediction`,
-              scenario: prompt,
-            });
+              scenario: prompt
+            })
             const data = api.data;
             return {
               type: "prediction",
@@ -427,6 +428,7 @@ const EarthSimAI = () => {
   };
 
   return (
+    <IsSignedIn>
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 mt-16">
       <div className="container mx-auto">
         {/* Input Section */}
@@ -787,6 +789,7 @@ const EarthSimAI = () => {
         )}
       </AnimatePresence>
     </div>
+    </IsSignedIn>
   );
 };
 

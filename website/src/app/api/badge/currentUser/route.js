@@ -8,18 +8,16 @@ export async function GET(request) {
   try {
     await connectToDB();
 
-    const url = new URL(request.url);
-    const urluserId = url.searchParams.get("id");
-
-    let user = await User.findById(urluserId);
+    let user = await getUser(request);
+    console.log("User from getUser:", user);
+    
     if (!user) {
       return Response.json({ error: "User not found" }, { status: 404 });
     }
 
     let userId = user._id;
 
-    if (urluserId) {
-      userId = urluserId;
+    if (userId) {
       user = await User.findById(userId)
         .select("firstName lastName email metamaskAddress")
         .lean();
@@ -32,9 +30,6 @@ export async function GET(request) {
     }
     const badges = await getAllBadgesForUser(user.metamaskAddress);
     console.log(badges)
-
-    
-
 
     return Response.json({ success: true, user, badges });
   } catch (error) {

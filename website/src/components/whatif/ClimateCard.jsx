@@ -22,6 +22,12 @@ export const ClimateSummaryCard = ({results}) => {
     const tempGraphData = results['temperature-graph'];
     const ozoneData = results['ozone_prediction'];
 
+    console.log('Climate Summary Card Results:', results);
+    console.log('Temperature Data:', tempData);
+    console.log('Humidity Data:', humidityData);
+    console.log('Temperature Graph Data:', tempGraphData);
+    console.log('Ozone Data:', ozoneData);
+
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}

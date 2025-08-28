@@ -49,7 +49,6 @@ The project combines cutting-edge AI technologies with real-world datasets from 
 - **Natural Language Queries**: Users ask hypothetical climate questions
   - Example: *"What if it rains today at 4 PM in Mumbai?"*
 - **AI-Powered Responses**: Context-aware AI processes queries using:
-  - Historical data analysis
   - ML model predictions
   - Real-time weather conditions
   - Agentic explanation using Reinforcement Learning
@@ -162,7 +161,7 @@ Climatopia/
    - Scenario configuration and management
    - User profiles, social features
    - Credit system and subscription management
-   - Payment processing (Stripe integration)
+   - Payment processing (RazorPay integration)
    - Notification system
 
 3. **Frontend Interface (Next.js)**
@@ -208,7 +207,7 @@ Climatopia/
 - **Database**: MongoDB with Mongoose
 - **Authentication**: Clerk
 - **File Storage**: Cloudinary
-- **Payments**: Stripe API
+- **Payments**: RazorPay API
 
 ### AI/ML Engine
 - **Language**: Python

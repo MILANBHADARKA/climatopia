@@ -215,7 +215,7 @@ Climatopia/
 - **Framework**: FastAPI
 - **ML Libraries**: PyTorch, scikit-learn, XGBoost, tensorflow, transformers, langchain, NLTK
 - **Data Processing**: Pandas, NumPy
-- **Visualization**: Matplotlib, Plotly
+- **Visualization**: Matplotlib, Plotly - graph plot
 
 ### Web3 (Optional)
 - **Wallet Integration**: WalletConnect / MetaMask

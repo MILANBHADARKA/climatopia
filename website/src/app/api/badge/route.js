@@ -16,20 +16,20 @@ export async function GET(req) {
     const wallet = searchParams.get("wallet");
 
     if (!wallet) {
-      return NextResponse.json({ error: "Wallet address is required" }, { status: 400 });
+      return NextResponse.json({ error: "Wallet address is required!" }, { status: 400 });
     }
 
     const user = await User.findOne({ metamaskAddress: wallet.toLowerCase() });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: "User not found!" }, { status: 404 });
     }
 
     const badges = await getAllBadgesForUser(wallet.toLowerCase());
     return NextResponse.json({ success: true, badges });
   } catch (err) {
     console.error("Error fetching badges:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json({ error: "Server error!" }, { status: 500 });
   }
 }
 
@@ -39,7 +39,7 @@ export async function POST(req) {
 
     const { userId } = getAuth(req);
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized!" }, { status: 401 });
     }
 
     // Find the user in the database using Clerk's userId
@@ -52,7 +52,7 @@ export async function POST(req) {
     const walletAddress = user.metamaskAddress?.toLowerCase();
     if (!walletAddress) {
       return NextResponse.json(
-        { error: "No wallet address linked to user" },
+        { error: "No wallet address linked to user!" },
         { status: 400 }
       );
     }
@@ -60,12 +60,57 @@ export async function POST(req) {
     // Fetch all badges using the wallet address
     const badges = await getAllBadgesForUser(walletAddress);
     return NextResponse.json({ success: true, badges });
-    
+
   } catch (err) {
     console.error("Error fetching badges:", err);
     return NextResponse.json(
       { error: "Failed to fetch badges" },
       { status: 500 }
     );
+  }
+}
+
+export async function PUT(req) {
+  try {
+    await connectToDB();
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { badgeName } = await req.json();
+    if (!badgeName) {
+      return NextResponse.json({ error: "Badge name is required" }, { status: 400 });
+    }
+
+    const user = await User
+                            .findOne({ userId });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    if (!user.metamaskAddress) {
+      return NextResponse.json({ error: "User has no linked wallet" }, { status: 400 });
+    }
+
+    const validBadges = ["Bronze", "Silver", "Gold", "Platinum"];
+    if (!validBadges.includes(badgeName)) {
+      return NextResponse.json({ error: "Invalid badge name" }, { status: 400 });
+    }
+
+    const alreadyHasBadge = await checkUserHasBadge(user.metamaskAddress, badgeName);
+    if (alreadyHasBadge) {
+      return NextResponse.json({ error: "User already has this badge" }, { status: 409 }); 
+    }
+
+    const mintResult = await mintBadgeToUser(user.metamaskAddress, badgeName);
+
+    return NextResponse.json({ success: true, mintResult });
+
+  } catch (err) {
+    console.error("Error minting badge:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

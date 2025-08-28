@@ -189,7 +189,7 @@ Climatopia/
    - Like/comment system
    - Trending scenarios and leaderboards
 
-7. **Web3 Rewards** *(Optional)*
+7. **Web3 Rewards** 
    - Achievement badges as NFTs
    - Crypto payment integration
    - Contributor recognition system

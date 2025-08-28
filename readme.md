@@ -117,6 +117,7 @@ Climatopia/
 │   ├── public/
 │   ├── src/
 │   │   ├── app/
+│   │   ├── app/api/             # API routes
 │   │   ├── components/
 │   │   ├── data/
 │   │   ├── models/

@@ -27,7 +27,7 @@
     "lucide-react": "^0.511.0",
     "mongodb": "^6.16.0",
     "mongoose": "^8.15.0",
-    "next": "15.3.2",
+    "next": "15.3.8",
     "nodemailer": "^7.0.3",
     "plotly.js": "^3.0.1",
     "razorpay": "^2.9.6",
